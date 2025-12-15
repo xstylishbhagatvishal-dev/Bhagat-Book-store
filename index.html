@@ -1,12 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
 <meta charset="UTF-8">
 <title>Bhagat Book Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ================= CSS START ================= -->
 <style>
+  @keyframes pop{
+  from{
+    transform:scale(.8);
+    opacity:0;
+  }
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+.footer{
+  margin-top:40px;
+  background:var(--card);
+  border-top:1px solid rgba(0,0,0,.08);
+  text-align:center;
+  padding:14px;
+}
+
+body.dark .footer{
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.footer-inner{
+  padding:20px 16px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.footer-brand h3{
+  margin:0;
+  color:var(--blue);
+}
+
+.footer-brand p{
+  margin:6px 0 0;
+  font-size:14px;
+  opacity:.8;
+}
+
+.footer-links a{
+  display:block;
+  text-decoration:none;
+  color:var(--text);
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.footer-links a:hover{
+  color:var(--blue);
+}
+
+.footer-bottom{
+  text-align:center;
+  padding:12px;
+  font-size:13px;
+  opacity:.7;
+  background:rgba(0,0,0,.03);
+}
+
+body.dark .footer-bottom{
+  background:rgba(255,255,255,.05);
+}
+  /* 📍 MAP SECTION */
+.map-section{
+  margin:18px 16px 24px;
+  background:var(--card);
+  border-radius:22px;
+  padding:16px;
+}
+
+.map-title{
+  font-weight:900;
+  font-size:18px;
+  margin-bottom:12px;
+  text-align:center;
+}
+
+.map-box{
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.08);
+}
+
+body.dark .map-box{
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.map-box iframe{
+  width:100%;
+  height:150px;
+  border:0;
+}
+.map-btn{
+  display:block;
+  margin-top:14px;
+  padding:14px;
+  text-align:center;
+  border-radius:16px;
+  background:linear-gradient(135deg,#FFD700,#FFC107); /* 💛 YELLOW */
+  color:#222;
+  font-weight:900;
+  text-decoration:none;
+}
+
+   /* STORY SECTION */
+.story-box{
+  margin:18px 16px;
+  background:var(--card);
+  border-radius:20px;
+  padding:20px;
+  font-style:italic;
+  line-height:1.7;
+  position:relative;
+}
+.story-box::before{
+  content:"“";
+  font-size:50px;
+  position:absolute;
+  top:-10px;
+  left:14px;
+  color:var(--blue);
+  font-weight:900;
+}
+.story-box::after{
+  content:"”";
+  font-size:50px;
+  position:absolute;
+  bottom:-20px;
+  right:16px;
+  color:var(--blue);
+  font-weight:900;
+}
+.story-box b{
+  display:block;
+  margin-top:10px;
+  font-style:normal;
+}
 :root{
   --blue:#2874f0;
   --darkblue:#174ea6;
@@ -34,15 +172,15 @@ body{
   color:var(--text);
   transition:.3s;
 }
-
-/* ===== HEADER ===== */
-.header{
+ 
+/* HEADER */
+  .header{
   position:sticky;
   top:0;
   z-index:50;
   background:linear-gradient(135deg,var(--blue),var(--darkblue));
   border-radius:0 0 10px 10px;
-  padding-bottom:3px;
+  padding-bottom:3px;   /* 👈 yahin se blue niche dikhega */
 }
 .top-row{
   display:flex;
@@ -54,8 +192,8 @@ body{
   color:white;
   font-size:30px;
   font-weight:900;
-  padding-bottom:6px;
-  border-bottom:3px solid rgba(255,255,255,0.6);
+  padding-bottom:6px;        /* gap */
+  border-bottom:3px solid rgba(255,255,255,0.6); /* 👈 white thin line */
 }
 .theme-btn{
   background:rgba(255,255,255,.2);
@@ -67,12 +205,14 @@ body{
   cursor:pointer;
 }
 .search{
-  margin:-1px 1px 1px;
+  margin:-1px 1px 1px;   /* 👈 header ke upar chipkega */
   background:var(--card);
   border-radius:16px;
   display:flex;
   align-items:center;
   padding:12px 14px;
+  z-index:1;
+  position:relative;
 }
 .search input{
   flex:1;border:none;outline:none;
@@ -80,7 +220,11 @@ body{
   color:var(--text);
 }
 
-/* ===== CATEGORIES ===== */
+/* PAGE */
+.page{display:none;padding:12px}
+.page.active{display:block}
+
+/* CATEGORIES */
 .categories{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -93,12 +237,12 @@ body{
   padding:14px 6px;
   text-align:center;
   font-weight:700;
-  cursor:pointer;
 }
 .cat .icon{font-size:30px}
 
-/* ===== SLIDER ===== */
+/* SLIDER */
 .slider{
+  margin:0px;
   border-radius:20px;
   overflow:hidden;
   height:190px;
@@ -123,19 +267,19 @@ body{
   object-fit:cover;
 }
 
-/* ===== GOOGLE RATING ===== */
+/* GOOGLE RATING */
 .rating-box{
   margin:16px;
   background:var(--card);
   border-radius:18px;
-  padding:10px;
+  padding:3px;
   text-align:center;
   text-decoration:none;
   color:var(--text);
 }
 .stars{color:#fbbc04;font-size:22px}
 
-/* ===== BUTTON ===== */
+/* BUTTON */
 .btn{
   display:block;
   margin:18px;
@@ -147,7 +291,7 @@ body{
   text-align:center;
 }
 
-/* ===== POPUPS ===== */
+/* CONTACT POPUP */
 .contact-popup{
   position:fixed;
   inset:0;
@@ -188,13 +332,7 @@ body{
 .call-btn{background:#ff9800}
 .whatsapp-btn{background:#25D366}
 .rate-btn{background:var(--blue)}
-
-/* ===== FOOTER & NAV ===== */
-.footer{
-  background:var(--card);
-  text-align:center;
-  padding:14px;
-}
+  
 .bottom-nav{
   position:fixed;
   bottom:12px;
@@ -208,54 +346,124 @@ body{
 }
 .space{height:110px}
 </style>
-<!-- ================= CSS END ================= -->
 </head>
 
+<!-- 🌙 DARK MODE DEFAULT -->
 <body class="dark">
 
-<!-- ================= HEADER START ================= -->
 <div class="header">
   <div class="top-row">
     <div class="store-text">Bhagat Book Store</div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
   </div>
   <div class="search">
-    <input placeholder="Search books…"> 🔍
-  </div>
+  <input
+    id="searchInput"
+    type="text"
+    placeholder="Search books…">
+  <span onclick="searchBooks()" style="cursor:pointer">🔍</span>
 </div>
-<!-- ================= HEADER END ================= -->
+</div>
 
-<!-- ================= CATEGORIES START ================= -->
+<!-- HOME -->
 <div class="categories">
-  <div class="cat" onclick="openCategory('school')"><div class="icon">📚</div>School</div>
-  <div class="cat" onclick="openCategory('college')"><div class="icon">📒</div>College</div>
-  <div class="cat" onclick="openCategory('exams')"><div class="icon">📕</div>Exams</div>
-  <div class="cat" onclick="openCategory('holy')"><div class="icon">🛕</div>Holy</div>
-</div>
-<!-- ================= CATEGORIES END ================= -->
+  <div class="cat" onclick="openCategory('school')">
+    <div class="icon">📚</div>School
+  </div>
 
-<!-- ================= SLIDER START ================= -->
-<div class="slider">
-  <div class="offer-badge" id="offerBadge"></div>
-  <div class="slides" id="slides">
-    <div class="slide"><img src="banner1.jpg"></div>
-    <div class="slide"><img src="banner2.jpg"></div>
-    <div class="slide"><img src="banner3.jpg"></div>
-    <div class="slide"><img src="banner4.jpg"></div>
-    <div class="slide"><img src="banner5.jpg"></div>
-    <div class="slide"><img src="banner6.jpg"></div>
+  <div class="cat" onclick="openCategory('college')">
+    <div class="icon">📒</div>College
+  </div>
+
+  <div class="cat" onclick="openCategory('exams')">
+    <div class="icon">📕</div>Govt.Job
+  </div>
+
+  <div class="cat" onclick="openCategory('holy')">
+    <div class="icon">🛕</div>Holy
   </div>
 </div>
-<!-- ================= SLIDER END ================= -->
+  <div class="slider">
+    <div class="offer-badge" id="offerBadge">🎁 Loading Offer…</div>
+    <div class="slides" id="slides">
+      <div class="slide"><img src="banner1.jpg"></div>
+      <div class="slide"><img src="banner2.jpg"></div>
+      <div class="slide"><img src="banner3.jpg"></div>
+        <div class="slide"><img src="banner4.jpg"></div>
+      <div class="slide"><img src="banner5.jpg"></div>
+      <div class="slide"><img src="banner6.jpg"></div>
+    </div>
+</div>
+  
 
-<!-- ================= RATING ================= -->
-<a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="rating-box">
-  <div class="stars">⭐⭐⭐⭐☆</div>
-  <b>4.6 / 5</b><br>
-  <small>Based on Google Reviews</small>
-</a>
+<!-- ✅ STORY SLIDER KE NICHE -->
+<div class="story-box">
+  More than 30 years ago, Bhagat Book Store began its journey with a small shop
+  and a big dream — to serve knowledge with honesty and dedication.
 
-<!-- ================= CONTACT POPUP ================= -->
+  Through struggles, hard work, and the trust of people, the store grew step by step.
+  Today, from Nursery to Competitive Exams, from Holy Books to College studies,
+  all kinds of books are available under one roof.
+
+  With both Retail and Wholesale services, Bhagat Book Store proudly stands
+  as the No. 1 Book Store in the area.
+
+  <b>— Bhagat Book Store ❤️</b>
+  
+   -----------------------------------------------------------------
+  
+30 से भी अधिक वर्ष पहले,
+भगत बुक स्टोर ने एक छोटे से दुकान और एक बड़े सपने के साथ अपनी यात्रा शुरू की —
+ईमानदारी और समर्पण के साथ ज्ञान की सेवा करने का सपना।
+
+संघर्ष, मेहनत और लोगों के विश्वास के साथ
+यह दुकान धीरे-धीरे आगे बढ़ती गई।
+आज नर्सरी से लेकर प्रतियोगी परीक्षाओं तक,
+धार्मिक पुस्तकों से लेकर कॉलेज की पढ़ाई तक,
+हर प्रकार की पुस्तकें एक ही छत के नीचे उपलब्ध हैं।
+
+रिटेल और होलसेल दोनों सेवाओं के साथ,
+भगत बुक स्टोर आज गर्व से
+इस क्षेत्र की नंबर 1 बुक स्टोर के रूप में खड़ा है।
+
+<b>— भगत बुक स्टोर ❤️</b>
+  
+  -----------------------------------------
+
+
+</div>
+  <!-- 📍 MAP SECTION -->
+<div class="map-section">
+  <div class="map-title">📍 Find Us Here</div>
+
+  <div class="map-box">
+    <iframe
+      src="https://www.google.com/maps?q=Bhagat%20Book%20Store%20Belbadda%20Godda%20Jharkhand&output=embed"
+      loading="lazy"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <a 
+    href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7"
+    target="_blank"
+    class="map-btn">
+    📍 Open in Google Maps
+  </a>
+</div>
+   
+  <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="rating-box">
+    <div class="stars">⭐⭐⭐⭐☆</div>
+    <b>4.6 / 5</b>
+    <small>Based on Google Reviews</small>
+  </a>
+
+<!-- CONTACT US -->
+<div class="page" id="contact">
+  <a class="btn" onclick="openContact()">✨ Contact Us ✨  </a>
+</div>
+
+<!-- CONTACT POPUP -->
 <div class="contact-popup" id="contactPopup">
   <div class="contact-box">
     <div class="popup-header">
@@ -264,75 +472,329 @@ body{
     </div>
     <div class="premium-actions">
       <a href="tel:9142048353" class="p-btn call-btn">📞 Call Now</a>
-      <a href="https://wa.me/919142048353" class="p-btn whatsapp-btn">📱 WhatsApp</a>
-      <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" class="p-btn rate-btn">⭐ Rate Us</a>
+      <a href="https://wa.me/919142048353" class="p-btn whatsapp-btn">📱WhatsApp</a>
+      <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="p-btn rate-btn">⭐ Rate Us</a>
     </div>
   </div>
 </div>
-
-<!-- ================= CATEGORY POPUP ================= -->
+<!-- CATEGORY POPUP -->
 <div class="contact-popup" id="categoryPopup">
   <div class="contact-box">
     <div class="popup-header">
-      <h3 id="catTitle"></h3>
+      <h3 id="catTitle">Category</h3>
       <span class="close-btn" onclick="closeCategory()">✕</span>
     </div>
-    <div class="premium-actions" id="catContent"></div>
+    <div class="premium-actions" id="catContent">
+      <!-- dynamic items -->
+    </div>
   </div>
 </div>
-
-<!-- ================= FOOTER ================= -->
 <footer class="footer">
   <b>Bhagat Book Store</b><br>
-  Belbadda, Godda, Jharkhand
+  Belbadda, Godda, Jharkhand<br><br>
+
+  © 2025 Bhagat Book Store. All Rights Reserved.
 </footer>
 
 <div class="space"></div>
-
 <div class="bottom-nav">
-  <div>🏠 Home</div>
-  <div onclick="openContact()">📞 Contact</div>
+  <div onclick="goHome()">🏠 Home</div>
+  <div onclick="openContactFlow()">📞 Contact Us</div>
 </div>
-
-<!-- ================= JS START ================= -->
+  </div>
 <script>
-/* THEME */
 function toggleTheme(){
   document.body.classList.toggle("dark");
-  themeBtn.innerText=document.body.classList.contains("dark")?"☀️":"🌙";
+
+  const btn = document.getElementById("themeBtn");
+
+  if(document.body.classList.contains("dark")){
+    localStorage.setItem("theme","dark");
+    btn.innerText = "☀️";
+  }else{
+    localStorage.setItem("theme","light");
+    btn.innerText = "🌙";
+  }
 }
 
-/* CONTACT */
-function openContact(){contactPopup.classList.add("show")}
-function closeContact(){contactPopup.classList.remove("show")}
+window.onload = () => {
+  const savedMode = localStorage.getItem("theme");
+  const btn = document.getElementById("themeBtn");
 
-/* OFFER */
-offerBadge.innerText=[0,6].includes(new Date().getDay())
-?"🎁 Weekend Special 15% OFF"
-:"🎁 Flat 10% OFF Today";
+  if(savedMode === "light"){
+    document.body.classList.remove("dark");
+    btn.innerText = "🌙";
+  }else{
+    document.body.classList.add("dark");
+    btn.innerText = "☀️";
+  }
+};
+</script>
+<script>
+/* PAGE SWITCH */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  
+}
+
+
+/* CONTACT POPUP */
+function openContact(){
+  document.getElementById("contactPopup").classList.add("show");
+}
+function closeContact(){
+  document.getElementById("contactPopup").classList.remove("show");
+}
+
+/* AUTO OFFER */
+const offerBadge=document.getElementById("offerBadge");
+const d=new Date().getDay();
+offerBadge.innerText = (d===0||d===6)
+  ? "🎁 Weekend Special 15% OFF"
+  : "🎁 Upto 70% OFF Today";
 
 /* SLIDER */
 let i=0;
+const slides=document.getElementById("slides");
 setInterval(()=>{
   i=(i+1)%slides.children.length;
   slides.style.transform=`translateX(-${i*100}%)`;
 },2500);
-
-/* CATEGORY */
-function openCategory(type){
-  const map={
-    school:["Nursery","LKG / UKG","Class 1–5","Class 6–8","Class 9–10","Class 11–12"],
-    college:["B.A.","B.Sc.","B.Com"],
-    exams:["SSC","Banking","Railways"],
-    holy:["Aarti & Puja","Ramayan","Mahabharat","Puja Books"]
-  };
-  catTitle.innerText=type.toUpperCase();
-  catContent.innerHTML=map[type].map(i=>`<div class="p-btn rate-btn">${i}</div>`).join("");
-  categoryPopup.classList.add("show");
-}
-function closeCategory(){categoryPopup.classList.remove("show")}
 </script>
-<!-- ================= JS END ================= -->
+<script>
+function openPage(page){
+  window.location.href = page;
+}
+</script>
+<script>
+function openCategory(type){
+  const title=document.getElementById("catTitle");
+  const content=document.getElementById("catContent");
 
+  let items=[];
+
+  if(type==="school"){
+    title.innerText="📚 School Books";
+    items=["Nursery","LKG / UKG","Class 1 – 5","Class 6 – 8","Class 9 – 10","Class 11 – 12"];
+  }
+  else if(type==="college"){
+    title.innerText="📒 College Books";
+    items=["B.A.","B.Sc.","B.Com"];
+  }
+  else if(type==="exams"){
+    title.innerText="📕 Competitive Exams";
+    items=["SSC","Banking","Railways"];
+  }
+  else if(type==="holy"){
+    title.innerText="🛕 Holy Books";
+    items=["Aarti & Puja","Ramayan","Mahabharat","Puja Books"];
+  }
+
+  content.innerHTML="";
+  items.forEach(i=>{
+  let pageName = "";
+
+  if(i === "Nursery") pageName = "nursery";
+  else if(i === "LKG / UKG") pageName = "lkg";
+  else if(i === "Class 1 – 5") pageName = "class-1-5";
+  else if(i === "Class 6 – 8") pageName = "class-6-8";
+  else if(i === "Class 9 – 10") pageName = "class-9-10";
+  else if(i === "Class 11 – 12") pageName = "class-11-12";
+  else pageName = i.toLowerCase().replace(/ /g,'-');
+
+  content.innerHTML += `
+    <div class="p-btn rate-btn" onclick="openPage('${pageName}.html')">
+      ${i}
+    </div>`;
+});
+  document.getElementById("categoryPopup").classList.add("show");
+}
+function closeCategory(){
+  document.getElementById("categoryPopup").classList.remove("show");
+}
+</script>
+<script>
+function goHome(){
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+</script>
+ <script>
+function openContactFlow(){
+  // contact section visible
+  showPage('contact');
+
+  // scroll to bottom
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth"
+  });
+}
+</script>
+  <!-- 🔄 LOADER -->
+<div id="loader" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(4px);
+z-index:9999;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:20px;
+font-weight:700;
+">
+  🔍 Searching books...
+</div>
+</script>
+<!-- ❌ NO RESULT POPUP (PREMIUM) -->
+<div id="noResult" style="
+display:none;
+position:fixed;
+inset:0;
+background:linear-gradient(135deg, rgba(15,23,42,.9), rgba(30,41,59,.9));
+backdrop-filter:blur(8px);
+z-index:9999;
+align-items:center;
+justify-content:center;
+">
+  <div style="
+  background:linear-gradient(135deg,#ffffff,#f1f5f9);
+  padding:28px 24px;
+  border-radius:24px;
+  text-align:center;
+  max-width:280px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  animation:pop .35s ease;
+  ">
+    
+    <div style="font-size:48px;margin-bottom:6px;">💔</div>
+
+    <h3 style="
+      margin:6px 0;
+      font-size:20px;
+      font-weight:900;
+      color:#0f172a;
+    ">
+      No Books Found
+    </h3>
+
+    <p style="
+      font-size:14px;
+      color:#475569;
+      margin:10px 0 14px;
+      line-height:1.6;
+    ">
+      “Every search teaches us something.  
+      Try again — the right book is waiting for you 📚✨”
+    </p>
+
+    <button onclick="closeNoResult()" style="
+      margin-top:10px;
+      padding:10px 22px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg,#2874f0,#174ea6);
+      color:white;
+      font-weight:800;
+      font-size:14px;
+      cursor:pointer;
+    ">
+      Try Again
+    </button>
+  </div>
+</div>
+<script>
+function searchBooks(){
+  const input = document.getElementById("searchInput");
+  const text = input.value.toLowerCase().trim();
+
+  if(!text) return;
+
+  document.getElementById("loader").style.display = "flex";
+
+  const words = text.split(/\s+/); // split by space
+  let url = "";
+
+  /* 🔍 WORD BY WORD MATCHING */
+  for(const w of words){
+
+    // SUBJECT
+    if(["english","eng"].includes(w)){
+      url = "nursery.html?subject=english"; break;
+    }
+    if(["hindi","hin"].includes(w)){
+      url = "nursery.html?subject=hindi"; break;
+    }
+    if(["math","maths"].includes(w)){
+      url = "nursery.html?subject=math"; break;
+    }
+    if(["drawing","art"].includes(w)){
+      url = "nursery.html?subject=drawing"; break;
+    }
+
+    // CLASS
+    if(["nursery","kg"].includes(w)){
+      url = "nursery.html"; break;
+    }
+    if(["lkg","ukg"].includes(w)){
+      url = "lkg.html"; break;
+    }
+
+    // GENERIC
+    if(["book","books","study","school"].includes(w)){
+      url = "nursery.html"; break;
+    }
+  }
+
+  /* ❌ NO MATCH */
+  if(!url){
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("noResult").style.display = "flex";
+    return;
+  }
+
+  setTimeout(()=>{
+    window.location.href = url;
+  }, 800);
+}
+</script>
+
+  setTimeout(()=>{
+    window.location.href = url;
+  }, 900);
+}
+</script>
+  <script>
+document.getElementById("searchInput").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    searchBooks();
+  }
+});
+</script>
+<script>
+function closeNoResult(){
+  const popup = document.getElementById("noResult");
+  const input = document.getElementById("searchInput");
+
+  // popup band
+  popup.style.display = "none";
+
+  // page ko upar le jao (search bar ke paas)
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  // cursor wapas search bar me
+  setTimeout(()=>{
+    input.focus();
+  }, 400);
+}
+</script>
 </body>
-</html>
+</html>v
