@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bhagat Book Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ================= CSS START ================= -->
+<style>
+:root{
+  --blue:#2874f0;
+  --darkblue:#174ea6;
+}
+
+/* 🌙 DARK MODE */
+body.dark{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#e5e7eb;
+}
+
+/* ☀️ LIGHT MODE */
+body{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#222;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Segoe UI,Arial;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
+}
+
+/* ===== HEADER ===== */
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:linear-gradient(135deg,var(--blue),var(--darkblue));
+  border-radius:0 0 10px 10px;
+  padding-bottom:3px;
+}
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px 6px;
+}
+.store-text{
+  color:white;
+  font-size:30px;
+  font-weight:900;
+  padding-bottom:6px;
+  border-bottom:3px solid rgba(255,255,255,0.6);
+}
+.theme-btn{
+  background:rgba(255,255,255,.2);
+  border:none;
+  color:white;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:18px;
+  cursor:pointer;
+}
+.search{
+  margin:-1px 1px 1px;
+  background:var(--card);
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  padding:12px 14px;
+}
+.search input{
+  flex:1;border:none;outline:none;
+  background:transparent;
+  color:var(--text);
+}
+
+/* ===== CATEGORIES ===== */
+.categories{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  padding:14px;
+}
+.cat{
+  background:var(--card);
+  border-radius:20px;
+  padding:14px 6px;
+  text-align:center;
+  font-weight:700;
+  cursor:pointer;
+}
+.cat .icon{font-size:30px}
+
+/* ===== SLIDER ===== */
+.slider{
+  border-radius:20px;
+  overflow:hidden;
+  height:190px;
+  position:relative;
+}
+.offer-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  background:linear-gradient(135deg,#ff9800,#ff5722);
+  color:white;
+  padding:6px 12px;
+  border-radius:20px;
+  font-weight:800;
+  z-index:5;
+}
+.slides{display:flex;transition:.6s}
+.slide{min-width:100%}
+.slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* ===== GOOGLE RATING ===== */
+.rating-box{
+  margin:16px;
+  background:var(--card);
+  border-radius:18px;
+  padding:10px;
+  text-align:center;
+  text-decoration:none;
+  color:var(--text);
+}
+.stars{color:#fbbc04;font-size:22px}
+
+/* ===== BUTTON ===== */
+.btn{
+  display:block;
+  margin:18px;
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--blue),var(--darkblue));
+  color:white;
+  font-weight:800;
+  text-align:center;
+}
+
+/* ===== POPUPS ===== */
+.contact-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(6px);
+  display:none;
+  justify-content:center;
+  align-items:flex-end;
+  z-index:999;
+}
+.contact-popup.show{display:flex}
+.contact-box{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:26px 26px 0 0;
+  padding:20px;
+}
+.popup-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.close-btn{font-size:22px;cursor:pointer}
+.premium-actions{
+  display:grid;
+  gap:14px;
+  margin-top:12px;
+}
+.p-btn{
+  padding:18px;
+  border-radius:18px;
+  color:white;
+  font-weight:800;
+  text-align:center;
+  text-decoration:none;
+}
+.call-btn{background:#ff9800}
+.whatsapp-btn{background:#25D366}
+.rate-btn{background:var(--blue)}
+
+/* ===== FOOTER & NAV ===== */
+.footer{
+  background:var(--card);
+  text-align:center;
+  padding:14px;
+}
+.bottom-nav{
+  position:fixed;
+  bottom:12px;
+  left:12px;
+  right:12px;
+  background:var(--card);
+  border-radius:22px;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+}
+.space{height:110px}
+</style>
+<!-- ================= CSS END ================= -->
+</head>
+
+<body class="dark">
+
+<!-- ================= HEADER START ================= -->
+<div class="header">
+  <div class="top-row">
+    <div class="store-text">Bhagat Book Store</div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
+  </div>
+  <div class="search">
+    <input placeholder="Search books…"> 🔍
+  </div>
+</div>
+<!-- ================= HEADER END ================= -->
+
+<!-- ================= CATEGORIES START ================= -->
+<div class="categories">
+  <div class="cat" onclick="openCategory('school')"><div class="icon">📚</div>School</div>
+  <div class="cat" onclick="openCategory('college')"><div class="icon">📒</div>College</div>
+  <div class="cat" onclick="openCategory('exams')"><div class="icon">📕</div>Exams</div>
+  <div class="cat" onclick="openCategory('holy')"><div class="icon">🛕</div>Holy</div>
+</div>
+<!-- ================= CATEGORIES END ================= -->
+
+<!-- ================= SLIDER START ================= -->
+<div class="slider">
+  <div class="offer-badge" id="offerBadge"></div>
+  <div class="slides" id="slides">
+    <div class="slide"><img src="banner1.jpg"></div>
+    <div class="slide"><img src="banner2.jpg"></div>
+    <div class="slide"><img src="banner3.jpg"></div>
+    <div class="slide"><img src="banner4.jpg"></div>
+    <div class="slide"><img src="banner5.jpg"></div>
+    <div class="slide"><img src="banner6.jpg"></div>
+  </div>
+</div>
+<!-- ================= SLIDER END ================= -->
+
+<!-- ================= RATING ================= -->
+<a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="rating-box">
+  <div class="stars">⭐⭐⭐⭐☆</div>
+  <b>4.6 / 5</b><br>
+  <small>Based on Google Reviews</small>
+</a>
+
+<!-- ================= CONTACT POPUP ================= -->
+<div class="contact-popup" id="contactPopup">
+  <div class="contact-box">
+    <div class="popup-header">
+      <h3>Bhagat Book Store</h3>
+      <span class="close-btn" onclick="closeContact()">✕</span>
+    </div>
+    <div class="premium-actions">
+      <a href="tel:9142048353" class="p-btn call-btn">📞 Call Now</a>
+      <a href="https://wa.me/919142048353" class="p-btn whatsapp-btn">📱 WhatsApp</a>
+      <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" class="p-btn rate-btn">⭐ Rate Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CATEGORY POPUP ================= -->
+<div class="contact-popup" id="categoryPopup">
+  <div class="contact-box">
+    <div class="popup-header">
+      <h3 id="catTitle"></h3>
+      <span class="close-btn" onclick="closeCategory()">✕</span>
+    </div>
+    <div class="premium-actions" id="catContent"></div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <b>Bhagat Book Store</b><br>
+  Belbadda, Godda, Jharkhand
+</footer>
+
+<div class="space"></div>
+
+<div class="bottom-nav">
+  <div>🏠 Home</div>
+  <div onclick="openContact()">📞 Contact</div>
+</div>
+
+<!-- ================= JS START ================= -->
+<script>
+/* THEME */
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+  themeBtn.innerText=document.body.classList.contains("dark")?"☀️":"🌙";
+}
+
+/* CONTACT */
+function openContact(){contactPopup.classList.add("show")}
+function closeContact(){contactPopup.classList.remove("show")}
+
+/* OFFER */
+offerBadge.innerText=[0,6].includes(new Date().getDay())
+?"🎁 Weekend Special 15% OFF"
+:"🎁 Flat 10% OFF Today";
+
+/* SLIDER */
+let i=0;
+setInterval(()=>{
+  i=(i+1)%slides.children.length;
+  slides.style.transform=`translateX(-${i*100}%)`;
+},2500);
+
+/* CATEGORY */
+function openCategory(type){
+  const map={
+    school:["Nursery","LKG / UKG","Class 1–5","Class 6–8","Class 9–10","Class 11–12"],
+    college:["B.A.","B.Sc.","B.Com"],
+    exams:["SSC","Banking","Railways"],
+    holy:["Aarti & Puja","Ramayan","Mahabharat","Puja Books"]
+  };
+  catTitle.innerText=type.toUpperCase();
+  catContent.innerHTML=map[type].map(i=>`<div class="p-btn rate-btn">${i}</div>`).join("");
+  categoryPopup.classList.add("show");
+}
+function closeCategory(){categoryPopup.classList.remove("show")}
+</script>
+<!-- ================= JS END ================= -->
+
+</body>
+</html>
