@@ -7,24 +7,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  .suggestions{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:var(--card);
+  border-radius:0 0 16px 16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  max-height:240px;
+  overflow-y:auto;
+  display:none;
+  z-index:99;
+}
+.suggestion-item{
+  padding:12px 14px;
+  cursor:pointer;
+  font-size:14px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+body.dark .suggestion-item{
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.suggestion-item:hover{
+  background:rgba(40,116,240,.1);
+}
   @keyframes pop{
   from{
     transform:scale(.8);
     opacity:0;
   }
-  }
   to{
     transform:scale(1);
     opacity:1;
+  }
   }
 .footer{
   margin-top:40px;
   background:var(--card);
   border-top:1px solid rgba(0,0,0,.08);
   text-align:center;
-  padding:14px;
+  padding:10px;
 }
-
 body.dark .footer{
   border-top:1px solid rgba(255,255,255,.1);
 }
@@ -35,18 +59,15 @@ body.dark .footer{
   justify-content:space-between;
   gap:20px;
 }
-
 .footer-brand h3{
   margin:0;
   color:var(--blue);
 }
-
 .footer-brand p{
   margin:6px 0 0;
   font-size:14px;
   opacity:.8;
 }
-
 .footer-links a{
   display:block;
   text-decoration:none;
@@ -54,11 +75,9 @@ body.dark .footer{
   font-size:14px;
   margin-bottom:6px;
 }
-
 .footer-links a:hover{
   color:var(--blue);
 }
-
 .footer-bottom{
   text-align:center;
   padding:12px;
@@ -66,7 +85,6 @@ body.dark .footer{
   opacity:.7;
   background:rgba(0,0,0,.03);
 }
-
 body.dark .footer-bottom{
   background:rgba(255,255,255,.05);
 }
@@ -77,24 +95,20 @@ body.dark .footer-bottom{
   border-radius:22px;
   padding:16px;
 }
-
 .map-title{
   font-weight:900;
   font-size:18px;
   margin-bottom:12px;
   text-align:center;
 }
-
 .map-box{
   overflow:hidden;
-  border-radius:18px;
+  border-radius:16px;
   border:1px solid rgba(0,0,0,.08);
 }
-
 body.dark .map-box{
   border:1px solid rgba(255,255,255,.1);
 }
-
 .map-box iframe{
   width:100%;
   height:150px;
@@ -111,7 +125,6 @@ body.dark .map-box{
   font-weight:900;
   text-decoration:none;
 }
-
    /* STORY SECTION */
 .story-box{
   margin:18px 16px;
@@ -119,7 +132,7 @@ body.dark .map-box{
   border-radius:20px;
   padding:20px;
   font-style:italic;
-  line-height:1.7;
+  line-height:1.6;
   position:relative;
 }
 .story-box::before{
@@ -149,21 +162,18 @@ body.dark .map-box{
   --blue:#2874f0;
   --darkblue:#174ea6;
 }
-
 /* 🌙 DARK MODE */
 body.dark{
   --bg:#0f172a;
   --card:#1e293b;
   --text:#e5e7eb;
 }
-
 /* ☀️ LIGHT MODE */
 body{
   --bg:#f5f7fb;
   --card:#ffffff;
   --text:#222;
 }
-
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -172,7 +182,6 @@ body{
   color:var(--text);
   transition:.3s;
 }
- 
 /* HEADER */
   .header{
   position:sticky;
@@ -205,25 +214,42 @@ body{
   cursor:pointer;
 }
 .search{
-  margin:-1px 1px 1px;   /* 👈 header ke upar chipkega */
-  background:var(--card);
+  flex:1;
+  height:42px;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(6px);
   border-radius:16px;
   display:flex;
   align-items:center;
-  padding:12px 14px;
-  z-index:1;
-  position:relative;
+  gap:10px;
+  padding:0 14px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);
+}
+body.dark .search{
+  background:rgba(0,0,0,.35);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.search-icon{
+  font-size:17px;
+  opacity:.75;
 }
 .search input{
-  flex:1;border:none;outline:none;
+  flex:1;
+  border:none;
+  outline:none;
   background:transparent;
-  color:var(--text);
+  color:white;
+  font-size:15px;
 }
-
+body.dark .search input{
+  color:#e5e7eb;
+}
+.search input::placeholder{
+  color:rgba(255,255,255,.75);
+}
 /* PAGE */
 .page{display:none;padding:12px}
 .page.active{display:block}
-
 /* CATEGORIES */
 .categories{
   display:grid;
@@ -234,12 +260,11 @@ body{
 .cat{
   background:var(--card);
   border-radius:20px;
-  padding:14px 6px;
+  padding:13px 6px;
   text-align:center;
   font-weight:700;
 }
 .cat .icon{font-size:30px}
-
 /* SLIDER */
 .slider{
   margin:0px;
@@ -248,15 +273,42 @@ body{
   height:190px;
   position:relative;
 }
+  /* 🔁 MOVING TEXT LEFT ➜ RIGHT */
+.offer-text{
+display:inline-block;
+white-space:nowrap;
+padding-left:100%;
+animation: moveText 25s linear infinite;
+}
+@keyframes moveText{
+from{
+transform:translateX(-100%);
+}
+to{
+transform:translateX(100%);
+}
+}
 .offer-badge{
   position:absolute;
-  top:14px;
-  left:14px;
-  background:linear-gradient(135deg,#ff9800,#ff5722);
+  top:0;
+  left:0;
+  width:100%;
+  height:25px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:transparent;   /* pure transparent */
   color:white;
-  padding:6px 12px;
-  border-radius:20px;
-  font-weight:800;
+
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.4px;
+  white-space:nowrap;
+
+  border-bottom:2px solid rgba(255,255,255,0.15);   /* glassy line */
+  overflow:hidden;
   z-index:5;
 }
 .slides{display:flex;transition:.6s}
@@ -266,19 +318,21 @@ body{
   height:100%;
   object-fit:cover;
 }
-
 /* GOOGLE RATING */
 .rating-box{
-  margin:16px;
+  margin:16px auto;          /* 👈 center container */
   background:var(--card);
   border-radius:18px;
-  padding:3px;
-  text-align:center;
+  padding:14px;
+  text-align:center;         /* 👈 text centre */
   text-decoration:none;
   color:var(--text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;        /* 👈 ⭐ 4.6 line exact centre */
+  gap:4px;
 }
 .stars{color:#fbbc04;font-size:22px}
-
 /* BUTTON */
 .btn{
   display:block;
@@ -290,7 +344,6 @@ body{
   font-weight:800;
   text-align:center;
 }
-
 /* CONTACT POPUP */
 .contact-popup{
   position:fixed;
@@ -322,35 +375,31 @@ body{
   margin-top:12px;
 }
 .p-btn{
-  padding:18px;
-  border-radius:18px;
+  padding:10px;
+  border-radius:10px;
   color:white;
-  font-weight:800;
+  font-weight:900;
   text-align:center;
   text-decoration:none;
 }
 .call-btn{background:#ff9800}
 .whatsapp-btn{background:#25D366}
 .rate-btn{background:var(--blue)}
-  
 .bottom-nav{
   position:fixed;
   bottom:12px;
   left:12px;
   right:12px;
   background:var(--card);
-  border-radius:22px;
+  border-radius:16px;
   display:flex;
   justify-content:space-around;
-  padding:10px 0;
+  padding:14px 0;
 }
-.space{height:110px}
-</style>
+  </style>
 </head>
-
 <!-- 🌙 DARK MODE DEFAULT -->
 <body class="dark">
-
 <div class="header">
   <div class="top-row">
     <div class="store-text">Bhagat Book Store</div>
@@ -360,31 +409,32 @@ body{
   <input
     id="searchInput"
     type="text"
-    placeholder="Search books…">
+    placeholder="Search books…"
+    autocomplete="off">
   <span onclick="searchBooks()" style="cursor:pointer">🔍</span>
+  <!-- 🔍 SUGGESTIONS BOX (POINT 1) -->
+  <div id="suggestions" class="suggestions"></div>
 </div>
 </div>
-
 <!-- HOME -->
 <div class="categories">
   <div class="cat" onclick="openCategory('school')">
     <div class="icon">📚</div>School
   </div>
-
   <div class="cat" onclick="openCategory('college')">
     <div class="icon">📒</div>College
   </div>
-
   <div class="cat" onclick="openCategory('exams')">
     <div class="icon">📕</div>Govt.Job
   </div>
-
   <div class="cat" onclick="openCategory('holy')">
     <div class="icon">🛕</div>Holy
   </div>
 </div>
   <div class="slider">
-    <div class="offer-badge" id="offerBadge">🎁 Loading Offer…</div>
+    <div class="offer-badge" id="offerBadge">
+  <span class="offer-text">🎁 Weekend Special 15% OFF</span>
+</div>
     <div class="slides" id="slides">
       <div class="slide"><img src="banner1.jpg"></div>
       <div class="slide"><img src="banner2.jpg"></div>
@@ -392,10 +442,11 @@ body{
         <div class="slide"><img src="banner4.jpg"></div>
       <div class="slide"><img src="banner5.jpg"></div>
       <div class="slide"><img src="banner6.jpg"></div>
+         <div class="slide"><img src="banner7.jpg"></div>
+      <div class="slide"><img src="banner8.jpg"></div>
+      <div class="slide"><img src="banner9.jpg"></div>
     </div>
-</div>
-  
-
+  </div>
 <!-- ✅ STORY SLIDER KE NICHE -->
 <div class="story-box">
   More than 30 years ago, Bhagat Book Store began its journey with a small shop
@@ -408,7 +459,7 @@ body{
   With both Retail and Wholesale services, Bhagat Book Store proudly stands
   as the No. 1 Book Store in the area.
 
-  <b>— Bhagat Book Store ❤️</b>
+  <b>~ Bhagat Book Store ❤️</b>
   
    -----------------------------------------------------------------
   
@@ -426,16 +477,13 @@ body{
 भगत बुक स्टोर आज गर्व से
 इस क्षेत्र की नंबर 1 बुक स्टोर के रूप में खड़ा है।
 
-<b>— भगत बुक स्टोर ❤️</b>
+<b>~ भगत बुक स्टोर ❤️</b>
   
   -----------------------------------------
-
-
 </div>
   <!-- 📍 MAP SECTION -->
 <div class="map-section">
   <div class="map-title">📍 Find Us Here</div>
-
   <div class="map-box">
     <iframe
       src="https://www.google.com/maps?q=Bhagat%20Book%20Store%20Belbadda%20Godda%20Jharkhand&output=embed"
@@ -443,7 +491,6 @@ body{
       allowfullscreen>
     </iframe>
   </div>
-
   <a 
     href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7"
     target="_blank"
@@ -451,18 +498,15 @@ body{
     📍 Open in Google Maps
   </a>
 </div>
-   
   <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="rating-box">
     <div class="stars">⭐⭐⭐⭐☆</div>
     <b>4.6 / 5</b>
     <small>Based on Google Reviews</small>
   </a>
-
 <!-- CONTACT US -->
 <div class="page" id="contact">
   <a class="btn" onclick="openContact()">✨ Contact Us ✨  </a>
 </div>
-
 <!-- CONTACT POPUP -->
 <div class="contact-popup" id="contactPopup">
   <div class="contact-box">
@@ -490,30 +534,27 @@ body{
   </div>
 </div>
 <footer class="footer">
-  <b>Bhagat Book Store</b><br>
-  Belbadda, Godda, Jharkhand<br><br>
-
+ 
   © 2025 Bhagat Book Store. All Rights Reserved.
 </footer>
-
 <div class="space"></div>
 <div class="bottom-nav">
   <div onclick="goHome()">🏠 Home</div>
   <div onclick="openContactFlow()">📞 Contact Us</div>
 </div>
-  </div>
+  
+<!-- Theme Toggle & Sync -->
 <script>
 function toggleTheme(){
   document.body.classList.toggle("dark");
-
   const btn = document.getElementById("themeBtn");
 
   if(document.body.classList.contains("dark")){
     localStorage.setItem("theme","dark");
-    btn.innerText = "☀️";
+    if(btn) btn.innerText = "☀️";
   }else{
     localStorage.setItem("theme","light");
-    btn.innerText = "🌙";
+    if(btn) btn.innerText = "🌙";
   }
 }
 
@@ -523,22 +564,20 @@ window.onload = () => {
 
   if(savedMode === "light"){
     document.body.classList.remove("dark");
-    btn.innerText = "🌙";
+    if(btn) btn.innerText = "🌙";
   }else{
     document.body.classList.add("dark");
-    btn.innerText = "☀️";
+    if(btn) btn.innerText = "☀️";
   }
 };
 </script>
+</body>
 <script>
 /* PAGE SWITCH */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  
 }
-
-
 /* CONTACT POPUP */
 function openContact(){
   document.getElementById("contactPopup").classList.add("show");
@@ -546,14 +585,6 @@ function openContact(){
 function closeContact(){
   document.getElementById("contactPopup").classList.remove("show");
 }
-
-/* AUTO OFFER */
-const offerBadge=document.getElementById("offerBadge");
-const d=new Date().getDay();
-offerBadge.innerText = (d===0||d===6)
-  ? "🎁 Weekend Special 15% OFF"
-  : "🎁 Upto 70% OFF Today";
-
 /* SLIDER */
 let i=0;
 const slides=document.getElementById("slides");
@@ -571,42 +602,62 @@ function openPage(page){
 function openCategory(type){
   const title=document.getElementById("catTitle");
   const content=document.getElementById("catContent");
-
   let items=[];
-
   if(type==="school"){
-    title.innerText="📚 School Books";
-    items=["Nursery","LKG / UKG","Class 1 – 5","Class 6 – 8","Class 9 – 10","Class 11 – 12"];
-  }
+  title.innerText="📚 School Books";
+items=[
+  {name:"Nursery", page:"all-books.html?class=nursery"},
+  {name:"LKG / UKG", page:"all-books.html?class=lkg,ukg"},
+  {name:"Class 1 – 5", page:"all-books.html?from=1&to=5"},
+  {name:"Class 6 – 8", page:"all-books.html?from=6&to=8"},
+  {name:"Class 9 – 10", page:"all-books.html?from=9&to=10"},
+  {name:"Class 11 – 12", page:"all-books.html?from=11&to=12"}
+];
+}
   else if(type==="college"){
     title.innerText="📒 College Books";
-    items=["B.A.","B.Sc.","B.Com"];
+    items =
+    [ {name:"B.A", page:"all-books.html?course=ba"},
+  {name:"B.Com", page:"all-books.html?course=bcom"},
+  {name:"B.Sc", page:"all-books.html?course=bsc"}
+];
   }
   else if(type==="exams"){
-    title.innerText="📕 Competitive Exams";
-    items=["SSC","Banking","Railways"];
-  }
-  else if(type==="holy"){
-    title.innerText="🛕 Holy Books";
-    items=["Aarti & Puja","Ramayan","Mahabharat","Puja Books"];
-  }
-
+  title.innerText="📕 Competitive Exams";
+  items=[
+    { name:"SSC", page:"all-books.html?exam=ssc" },
+    { name:"Banking", page:"all-books.html?exam=banking" },
+    { name:"Railways", page:"all-books.html?exam=railway" }
+  ];
+}
+ else if(type==="holy"){
+  title.innerText="🛕 Holy Books";
+  items=[
+    { name:"Aarti & Puja", page:"all-books.html?category=religious&subject=puja" },
+    { name:"Ramayan", page:"all-books.html?category=religious&subject=ramayan" },
+    { name:"Mahabharat", page:"all-books.html?category=religious&subject=mahabharat" },
+    { name:"Gita", page:"all-books.html?category=religious&subject=gita" }
+  ];
+}
   content.innerHTML="";
-  items.forEach(i=>{
-  let pageName = "";
+  content.innerHTML="";
 
-  if(i === "Nursery") pageName = "nursery";
-  else if(i === "LKG / UKG") pageName = "lkg";
-  else if(i === "Class 1 – 5") pageName = "class-1-5";
-  else if(i === "Class 6 – 8") pageName = "class-6-8";
-  else if(i === "Class 9 – 10") pageName = "class-9-10";
-  else if(i === "Class 11 – 12") pageName = "class-11-12";
-  else pageName = i.toLowerCase().replace(/ /g,'-');
-
-  content.innerHTML += `
-    <div class="p-btn rate-btn" onclick="openPage('${pageName}.html')">
-      ${i}
-    </div>`;
+items.forEach(i=>{
+  // ✅ Object based (School / Exams)
+  if(typeof i === "object"){
+    content.innerHTML += `
+      <div class="p-btn rate-btn" onclick="openPage('${i.page}')">
+        ${i.name}
+      </div>`;
+  }
+  // ✅ String based (College / Holy)
+  else{
+    let pageName = i.toLowerCase().replace(/ /g,'-');
+    content.innerHTML += `
+      <div class="p-btn rate-btn" onclick="openPage('${pageName}.html')">
+        ${i}
+      </div>`;
+  }
 });
   document.getElementById("categoryPopup").classList.add("show");
 }
@@ -626,7 +677,6 @@ function goHome(){
 function openContactFlow(){
   // contact section visible
   showPage('contact');
-
   // scroll to bottom
   window.scrollTo({
     top: document.body.scrollHeight,
@@ -670,9 +720,7 @@ justify-content:center;
   box-shadow:0 20px 40px rgba(0,0,0,.25);
   animation:pop .35s ease;
   ">
-    
     <div style="font-size:48px;margin-bottom:6px;">💔</div>
-
     <h3 style="
       margin:6px 0;
       font-size:20px;
@@ -681,7 +729,6 @@ justify-content:center;
     ">
       No Books Found
     </h3>
-
     <p style="
       font-size:14px;
       color:#475569;
@@ -691,7 +738,6 @@ justify-content:center;
       “Every search teaches us something.  
       Try again — the right book is waiting for you 📚✨”
     </p>
-
     <button onclick="closeNoResult()" style="
       margin-top:10px;
       padding:10px 22px;
@@ -708,59 +754,286 @@ justify-content:center;
   </div>
 </div>
 <script>
+/* 📚 MASTER KEYWORDS suggestion(correct words) */
+const keywords = [
+  "nursery","lkg","ukg",
+  "english","hindi","math","maths",
+  "drawing","art","rhymes","evs","sst",
+  "school books","kg books","diary",
+  "ramayan","mahabharat","puja books",
+  "ssc books","banking books","railway books",
+"class 1","class 2","class 3","class 4","class 5",
+"class 6","class 7","class 8","class 9","class 10","class 11",
+"class 12","genenral knowledge","computer","gk/gs","science"," english grammar","hindi grammar"
+];
+/* ❌ WRONG → ✅ CORRECT (AI AUTO-CORRECT + NOISE REMOVAL) */
+const corrections = {
+  // spelling mistakes
+  "englis": "english",
+  "maths": "math",
+  "rymes": "rhymes",
+  "ramayanam": "ramayan",
+  "mahabharath": "mahabharat",
+  "scool": "school",
+  "buk": "book",
+  "boks": "books",
+  "dary": "diary",
+  "dairy": "diary",
+  "cls": "class",
+  "std": "class",
+  "gk": "general knowledge",
+  "compoter": "computer",
+  "scienc": "science",
+  "gramer": "grammar",
+  "grammer": "grammar",
+
+  // ram related (AI intent help)
+  "ramji": "ram",
+  "ramjee": "ram",
+  "ramayanji": "ramayan",
+
+  // ❌ NOISE WORDS (remove completely)
+  "kitab": "",
+  "kitabe": "",
+  "kitaben": "",
+  "book": "",
+  "books": "",
+  "pustak": "",
+  "copy": "",
+  "ki": "",
+  "ka": "",
+  "ke": "",
+  "mein": "",
+  "me": "",
+  "wali": "",
+  "wala": ""
+};
+const input = document.getElementById("searchInput");
+const suggestionBox = document.getElementById("suggestions");
+/* ✨ AUTO CORRECT FUNCTION */
+function autoCorrect(word){
+  word = word.toLowerCase();
+  return corrections[word] || word;
+}
+/* 🔍 LIVE SUGGESTIONS */
+input.addEventListener("input", ()=>{
+  let val = input.value.toLowerCase().trim();
+  suggestionBox.innerHTML = "";
+  if(!val){
+    suggestionBox.style.display="none";
+    return;
+  }
+  val = autoCorrect(val);
+  const matches = keywords.filter(k => k.includes(val));
+  if(matches.length === 0){
+    suggestionBox.style.display="none";
+    return;
+  }
+  matches.forEach(m=>{
+    const div = document.createElement("div");
+    div.className = "suggestion-item";
+    div.innerText = m;
+    div.onclick = ()=>{
+      input.value = m;
+      suggestionBox.style.display="none";
+      searchBooks();
+    };
+    suggestionBox.appendChild(div);
+  });
+  suggestionBox.style.display="block";
+});
+/* CLICK OUTSIDE → CLOSE */
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".search")){
+    suggestionBox.style.display="none";
+  }
+});
+</script>
+<script>
 function searchBooks(){
   const input = document.getElementById("searchInput");
   const text = input.value.toLowerCase().trim();
-
   if(!text) return;
 
   document.getElementById("loader").style.display = "flex";
 
-  const words = text.split(/\s+/); // split by space
+  
+
+  const words = text.split(/\s+/).map(w => autoCorrect(w));
+  // AI-style partial match helper
+const has = (key) => words.some(w => w.includes(key));
   let url = "";
+const classMatch = text.match(/class\s*(\d{1,2})/);
+  // ===== CLASS SEARCH (DYNAMIC & FIXED) =====
 
-  /* 🔍 WORD BY WORD MATCHING */
-  for(const w of words){
+// Nursery / LKG / UKG
+if (text.includes("nursery")) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?class=nursery";
+  return;
+}
+if (text.includes("lkg")) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?class=lkg";
+  return;
+}
 
-    // SUBJECT
-    if(["english","eng"].includes(w)){
-      url = "nursery.html?subject=english"; break;
-    }
-    if(["hindi","hin"].includes(w)){
-      url = "nursery.html?subject=hindi"; break;
-    }
-    if(["math","maths"].includes(w)){
-      url = "nursery.html?subject=math"; break;
-    }
-    if(["drawing","art"].includes(w)){
-      url = "nursery.html?subject=drawing"; break;
-    }
+if (text.includes("ukg")) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?class=ukg";
+  return;
+}
 
-    // CLASS
-    if(["nursery","kg"].includes(w)){
-      url = "nursery.html"; break;
-    }
-    if(["lkg","ukg"].includes(w)){
-      url = "lkg.html"; break;
-    }
+if (classMatch) {
+  const cls = classMatch[1];
+  document.getElementById("loader").style.display = "none";
+  location.href = `all-books.html?from=${cls}&to=${cls}`;
+  return;
+}
+  // ===== SUBJECT ONLY SEARCH =====
+const subjects = [
+  "english","hindi","math","maths",
+  "science","evs","grammar","drawing",
+  "computer","sanskrit"
+];
 
-    // GENERIC
-    if(["book","books","study","school"].includes(w)){
-      url = "nursery.html"; break;
+if (subjects.includes(text)) {
+  const sub = text === "maths" ? "math" : text;
+  location.href = `all-books.html?subject=${sub}`;
+  return;
+}
+ if (!url) {
+   if (words.includes("ssc")) {
+  url = "all-books.html?exam=ssc";
+
+  if (words.includes("math") || words.includes("maths")) {
+    url += "&subject=math";
+  }
+  else if (words.includes("english") || words.includes("eng")) {
+    url += "&subject=english";
+  }
+  else if (words.includes("reasoning")) {
+    url += "&subject=reasoning";
+  }
+  else if (words.includes("gk") || words.includes("gs")) {
+    url += "&subject=gk";
+  }
+}
+
+else if (words.includes("rail") || words.includes("railway")) {
+  url = "all-books.html?exam=railway";
+
+  if (words.includes("math") || words.includes("maths")) {
+    url += "&subject=math";
+  }
+  else if (words.includes("english") || words.includes("eng")) {
+    url += "&subject=english";
+  }
+  else if (words.includes("reasoning")) {
+    url += "&subject=reasoning";
+  }
+  else if (words.includes("gk") || words.includes("gs")) {
+    url += "&subject=gk";
+  }
+}
+else if (words.includes("bank") || words.includes("banking")) {
+  url = "all-books.html?exam=banking";
+
+  if (words.includes("math") || words.includes("maths")) {
+    url += "&subject=math";
+  }
+  else if (words.includes("english") || words.includes("eng")) {
+    url += "&subject=english";
+  }
+  else if (words.includes("reasoning")) {
+    url += "&subject=reasoning";
+  }
+}
+// ================= GRAMMAR =================
+else if (words.includes("grammar") && words.includes("hindi")) {
+  url = "all-books.html?subject=hindigrammar";
+}
+else if (words.includes("grammar") && words.includes("english")) {
+  url = "all-books.html?subject=grammar";
+}
+
+// ===== HOLY BOOKS SEARCH (AI INTENT) =====
+else if (
+  words.includes("ram") ||
+  words.includes("ramayan") ||
+  (words.includes("ram") && words.includes("katha"))
+) {
+  url = "all-books.html?category=religious&subject=ramayan";
+}
+else if (words.includes("mahabharat")) {
+  url = "all-books.html?category=religious&subject=mahabharat";
+}
+else if (words.includes("gita") || words.includes("geeta")) {
+  url = "all-books.html?category=religious&subject=gita";
+}
+else if (words.includes("puja") || words.includes("aarti")) {
+  url = "all-books.html?category=religious&subject=puja";
+}
+   // ===== AI LANGUAGE INTENT =====
+if (words.includes("hindi")) {
+  url = "all-books.html?subject=hindi";
+}
+else if (words.includes("english") || words.includes("eng")) {
+  url = "all-books.html?subject=english";
+}
+  /* ===== SUBJECT (SINGLE WORD MATCH) ===== */
+  else {
+    for (const w of words) {
+
+      if (["english","eng"].includes(w)) {
+        url = "all-books.html?subject=english"; break;
+      }
+      if (["hindi","hin"].includes(w)) {
+        url = "all-books.html?subject=hindi"; break;
+      }
+      if (["math","maths"].includes(w)) {
+        url = "all-books.html?subject=math"; break;
+      }
+      if (["drawing","art"].includes(w)) {
+        url = "all-books.html?subject=drawing"; break;
+      }
+      if (["rhymes","rymes","ryms","poem"].includes(w)) {
+        url = "all-books.html?subject=rhymes"; break;
+      }
+      if (["evs","sst","social"].includes(w)) {
+        url = "all-books.html?subject=evs"; break;
+      }
+      if (["pattern","picture"].includes(w)) {
+        url = "all-books.html?subject=pattern"; break;
+      }
+      if (["diary","dary"].includes(w)) {
+        url = "all-books.html?subject=diary"; break;
+      }
+      if (["grammar","gramer","gramar","grammer"].includes(w)) {
+        url = "all-books.html?subject=grammar"; break;
+      }
+      if (["science","scn","sinc"].includes(w)) {
+        url = "all-books.html?subject=science"; break;
+      }
+      if (["computer","compter","computr"].includes(w)) {
+        url = "all-books.html?subject=computer"; break;
+      }
+      if (["snk","sans","sanskrit"].includes(w)) {
+        url = "all-books.html?subject=sanskrit"; break;
+      }
     }
   }
+}
 
-  /* ❌ NO MATCH */
   if(!url){
     document.getElementById("loader").style.display = "none";
     document.getElementById("noResult").style.display = "flex";
     return;
   }
 
-  setTimeout(()=>{
-    window.location.href = url;
-  }, 800);
-} 
+  setTimeout(()=> location.href = url, 700);
+}
+
 </script>
   <script>
 document.getElementById("searchInput").addEventListener("keydown", function(e){
@@ -773,21 +1046,25 @@ document.getElementById("searchInput").addEventListener("keydown", function(e){
 function closeNoResult(){
   const popup = document.getElementById("noResult");
   const input = document.getElementById("searchInput");
-
   // popup band
   popup.style.display = "none";
-
   // page ko upar le jao (search bar ke paas)
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-
   // cursor wapas search bar me
   setTimeout(()=>{
     input.focus();
   }, 400);
 }
+</script>
+<script>
+const offerText = document.querySelector(".offer-text");
+const d = new Date().getDay();
+offerText.innerText = (d===0 || d===6)
+  ? "🎁 Weekend Special 15% OFF"
+  : "🎁 Weekend Special Upto 70% OFF  🎉";
 </script>
 </body>
 </html>
