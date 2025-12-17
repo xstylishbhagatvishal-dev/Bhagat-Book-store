@@ -1066,5 +1066,17 @@ offerText.innerText = (d===0 || d===6)
   ? "🎁 Weekend Special 15% OFF"
   : "🎁 Weekend Special Upto 70% OFF  🎉";
 </script>
+  <!-- other scripts -->
+<script src="..."></script>
+
+<!-- 🔁 BACK / FORWARD FIX -->
+<script>
+window.addEventListener("pageshow", function () {
+  const loader = document.getElementById("loader");
+  if(loader){
+    loader.style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
