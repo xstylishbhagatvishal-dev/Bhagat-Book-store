@@ -182,14 +182,33 @@ body{
   color:var(--text);
   transition:.3s;
 }
-/* HEADER */
-  .header{
+.header{
   position:sticky;
   top:0;
   z-index:50;
-  background:linear-gradient(135deg,var(--blue),var(--darkblue));
-  border-radius:0 0 10px 10px;
-  padding-bottom:3px;   /* 👈 yahin se blue niche dikhega */
+
+  /* 💎 Premium opaque blue + gold gradient */
+  background:linear-gradient(
+    320deg,
+    #0b2540 0%,   /* deep navy blue */
+    #123d6b 40%,  /* dark blue */ /* rich yellow */
+  #1e6bb8 60%,
+#facc15 120%,
+#f59e0b 100%
+  );
+
+  
+  /* strong separation */
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+ 
+
+  border-radius:0 0 12px 12px;
+  padding-bottom:4px;
+
+  /* 🔒 Block content behind */
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.45),
+    
 }
 .top-row{
   display:flex;
@@ -227,7 +246,7 @@ body{
 }
 body.dark .search{
   background:rgba(0,0,0,.35);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
 }
 .search-icon{
   font-size:17px;
@@ -299,7 +318,15 @@ transform:translateX(100%);
   align-items:center;
   justify-content:center;
 
-  background:transparent;   /* pure transparent */
+  /* 🔥 Red + Yellow glass */
+  background:linear-gradient(
+    90deg,
+    rgba(255,23,68,0.35),   /* red */
+    rgba(255,193,7,0.35)    /* yellow */
+  );
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+
   color:white;
 
   font-size:13px;
@@ -307,7 +334,7 @@ transform:translateX(100%);
   letter-spacing:.4px;
   white-space:nowrap;
 
-  border-bottom:2px solid rgba(255,255,255,0.15);   /* glassy line */
+  border-bottom:1px solid rgba(255,255,255,0.3);
   overflow:hidden;
   z-index:5;
 }
@@ -332,8 +359,29 @@ transform:translateX(100%);
   align-items:center;        /* 👈 ⭐ 4.6 line exact centre */
   gap:4px;
 }
-.stars{color:#fbbc04;font-size:22px}
-/* BUTTON */
+.stars{
+  position:relative;
+  font-size:22px;
+  line-height:1;
+  letter-spacing:1px;
+}
+
+/* grey stars (base) */
+.stars::before{
+  content:"★★★★★";
+  color:#d1d5db;   /* light grey */
+}
+
+/* filled stars (overlay) */
+.stars::after{
+  content:"★★★★★";
+  position:absolute;
+  left:0;
+  top:0;
+  width:calc(var(--rating) / 5 * 100%);
+  overflow:hidden;
+  color:#fbbc04;   /* gold */
+}
 .btn{
   display:block;
   margin:18px;
@@ -499,8 +547,7 @@ transform:translateX(100%);
   </a>
 </div>
   <a href="https://maps.app.goo.gl/Wqda2f4Lwe9N3aEB7" target="_blank" class="rating-box">
-    <div class="stars">⭐⭐⭐⭐☆</div>
-    <b>4.6 / 5</b>
+    <div class="stars" style="--rating:4.6"></div>
     <small>Based on Google Reviews</small>
   </a>
 <!-- CONTACT US -->
@@ -607,7 +654,7 @@ function openCategory(type){
   title.innerText="📚 School Books";
 items=[
   {name:"Nursery", page:"all-books.html?class=nursery"},
-  {name:"LKG / UKG", page:"all-books.html?class=lkg,ukg"},
+ {name:"LKG / UKG", page:"all-books.html?kg=all"},
   {name:"Class 1 – 5", page:"all-books.html?from=1&to=5"},
   {name:"Class 6 – 8", page:"all-books.html?from=6&to=8"},
   {name:"Class 9 – 10", page:"all-books.html?from=9&to=10"},
@@ -764,7 +811,7 @@ const keywords = [
   "ssc books","banking books","railway books",
 "class 1","class 2","class 3","class 4","class 5",
 "class 6","class 7","class 8","class 9","class 10","class 11",
-"class 12","genenral knowledge","computer","gk/gs","science"," english grammar","hindi grammar"
+"class 12","computer","gk/gs","general","science"," english grammar","hindi grammar"
 ];
 /* ❌ WRONG → ✅ CORRECT (AI AUTO-CORRECT + NOISE REMOVAL) */
 const corrections = {
@@ -786,6 +833,9 @@ const corrections = {
   "scienc": "science",
   "gramer": "grammar",
   "grammer": "grammar",
+  "general knowledge": "gk",
+"General":"gk",
+  
 
   // ram related (AI intent help)
   "ramji": "ram",
@@ -857,13 +907,72 @@ function searchBooks(){
 
   document.getElementById("loader").style.display = "flex";
 
-  
 
   const words = text.split(/\s+/).map(w => autoCorrect(w));
   // AI-style partial match helper
 const has = (key) => words.some(w => w.includes(key));
   let url = "";
 const classMatch = text.match(/class\s*(\d{1,2})/);
+
+// school books
+if (text.includes("school")) {
+  document.getElementById("loader").style.display = "none";
+ location.href = "all-books.html?school=all";
+  return;
+}
+
+// college / graduation
+if (
+  text.includes("college") ||
+  text.includes("graduation") ||
+  text.includes("degree")
+) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?course=all";
+  return;
+}
+
+// competitive / govt exams
+if (
+  text.includes("competition") ||
+  text.includes("competitive") ||
+  text.includes("govt") ||
+  text.includes("government")
+) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?exam=all";
+  return;
+}
+
+// exam books (exclude holy)
+if (
+  text.includes("exam",) &&
+  (text.includes("book") || text.includes("books"))
+) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?category=nonholy";
+  return;
+}
+
+// holy / religious
+if (
+  text.includes("holy") ||
+  text.includes("religious") ||
+  text.includes("puja") ||
+  text.includes("aarti")
+) {
+  document.getElementById("loader").style.display = "none";
+  location.href = "all-books.html?category=religious";
+  return;
+}
+  // ================= GRAMMAR =================
+else if (words.includes("grammar") && words.includes("hindi")) {
+  url = "all-books.html?subject=hindigrammar";
+}
+else if (words.includes("grammar") && words.includes("english")) {
+  url = "all-books.html?subject=grammar";
+}
+
   // ===== CLASS SEARCH (DYNAMIC & FIXED) =====
 
 // Nursery / LKG / UKG
@@ -872,12 +981,14 @@ if (text.includes("nursery")) {
   location.href = "all-books.html?class=nursery";
   return;
 }
+// 🔹 LKG search (ONLY LKG)
 if (text.includes("lkg")) {
   document.getElementById("loader").style.display = "none";
   location.href = "all-books.html?class=lkg";
   return;
 }
 
+// 🔹 UKG search (ONLY UKG)
 if (text.includes("ukg")) {
   document.getElementById("loader").style.display = "none";
   location.href = "all-books.html?class=ukg";
@@ -894,7 +1005,7 @@ if (classMatch) {
 const subjects = [
   "english","hindi","math","maths",
   "science","evs","grammar","drawing",
-  "computer","sanskrit"
+  "computer","sanskrit","gk",
 ];
 
 if (subjects.includes(text)) {
@@ -948,13 +1059,6 @@ else if (words.includes("bank") || words.includes("banking")) {
   else if (words.includes("reasoning")) {
     url += "&subject=reasoning";
   }
-}
-// ================= GRAMMAR =================
-else if (words.includes("grammar") && words.includes("hindi")) {
-  url = "all-books.html?subject=hindigrammar";
-}
-else if (words.includes("grammar") && words.includes("english")) {
-  url = "all-books.html?subject=grammar";
 }
 
 // ===== HOLY BOOKS SEARCH (AI INTENT) =====
@@ -1021,7 +1125,28 @@ else if (words.includes("english") || words.includes("eng")) {
       if (["snk","sans","sanskrit"].includes(w)) {
         url = "all-books.html?subject=sanskrit"; break;
       }
+      if (["gk","general knowledge","general","gs","gk/gs"].includes(w)) {
+        url = "all-books.html?subject=gk"; break;
+      }
     }
+    /* ===== GENERAL INTENT SEARCH (FIXED) ===== */
+
+// all books
+if (
+  (text.includes("book") || text.includes("books")|| text.includes("all")) &&
+  !words.includes("railway") &&
+  !words.includes("rail") &&
+  !words.includes("ssc") &&
+  !words.includes("bank") &&
+  !words.includes("banking") &&
+  !text.includes("college") &&
+  !text.includes("graduation") &&
+    
+  !text.includes("exam")
+) {
+  location.href = "all-books.html";
+  return;
+}
   }
 }
 
@@ -1065,18 +1190,6 @@ const d = new Date().getDay();
 offerText.innerText = (d===0 || d===6)
   ? "🎁 Weekend Special 15% OFF"
   : "🎁 Weekend Special Upto 70% OFF  🎉";
-</script>
-  <!-- other scripts -->
-<script src="..."></script>
-
-<!-- 🔁 BACK / FORWARD FIX -->
-<script>
-window.addEventListener("pageshow", function () {
-  const loader = document.getElementById("loader");
-  if(loader){
-    loader.style.display = "none";
-  }
-});
 </script>
 </body>
 </html>
