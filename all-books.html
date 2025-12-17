@@ -124,24 +124,40 @@ body.dark .search input{
   object-fit:contain;  
 }  
   
-.title{  
-  font-size:14px;  
-  font-weight:600;  
-  margin:6px 0;  
-}  
+.title{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:0;
+  line-height:1.15;   /* 👈 THIS IS KEY */
+}
   
-.stars{  
-  color:#fbbc04;  
-  font-size:14px;  
-}  
+.stars{
+  position:relative;
+  display:block;      /* 👈 inline-block hatao */
+  margin-top:0;
+  font-size:16px;
+  line-height:1;      /* 👈 extra vertical space remove */
+}
+.stars::before{
+  content:"★★★★★";
+  color:#d1d5db;
+}
+.stars::after{
+  content:"★★★★★";
+  position:absolute;
+  left:0;
+  top:0;
+  width:var(--fill, 0%);
+  overflow:hidden;
+  color:#fbbc04;
+}
 /* ===============================
    PRICE – LIGHT MODE (DEFAULT)
    Neon OFF
 ================================ */
 .price{
   font-weight:800;
-  margin-top:4px;
-  font-size:18px;
+  font-size:15px;
   color:#16a34a;     /* clean green */
   text-shadow:none;  /* neon disabled */
 }
@@ -186,11 +202,33 @@ body.dark .price{
 /* ===============================
    CUT PRICE (MRP)
 ================================ */
-.cut{
-  text-decoration:line-through;
-  color:#888;
-  font-size:13px;
-  margin-left:4px;
+.price-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+/* 🔖 Discount badge – LIGHT MODE (default, no glow) */
+.price-cut{
+  font-size:8px;
+  font-weight:300;
+  padding:0.4px 4px;
+  border-radius:2px;
+  background:#ef4444;   /* normal red */
+  color:#fff;
+  box-shadow:none;      /* ❌ no glow */
+  animation:none;       /* ❌ no pulse */
+}
+  /* 🌙 DARK MODE – Glow ON */
+body.dark .price-cut{
+  background:#ff1744;
+  box-shadow:0 0 6px rgba(255,23,68,.7);
+  animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 4px rgba(255,23,68,.5)}
+  50%{box-shadow:0 0 10px rgba(255,23,68,.9)}
+  100%{box-shadow:0 0 4px rgba(255,23,68,.5)}
 }
 
 /* ===============================
@@ -202,236 +240,264 @@ body.dark .price{
 .cut{  
   text-decoration:line-through;  
   color:#888;  
-  font-size:13px;  
-  margin-left:4px;  
+  font-size:8px;  
+  margin-left:4px; 
+margin-top:-1;  
 }
-  .stock-badge{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:12px;
+.card{
+  position:relative;
+  padding:10px;
+  padding-bottom:30px; /* 👈 badge ke liye jagah */
+}
+
+.stock-badge{
+  position:absolute;
+  left:0;
+  bottom:0;
+
+  width:100%;          /* 🔥 full card width */
+  height:25px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   font-size:12px;
   font-weight:800;
-  margin-top:6px;
+
+  border-radius:0 0 16px 16px; /* card ke niche chipka hua */
 }
 .in-stock{background:#22c55e;color:white;}
 .limited-stock{background:#f59e0b;color:white;}
 .out-stock{background:#ef4444;color:white;}
 </style>
-
-</head>
+</style>
+</head> 
 <body class="dark">
 
 <!-- ===== HEADER ===== -->
 <div class="header">
   <div class="back" onclick="history.back()">⬅</div>
-  <div class="search">Search nursery books</div>
+  <div class="search">
+  <input
+    id="searchInput"
+    type="text"
+    placeholder="Search books…"
+    autocomplete="off">
+  <span onclick="searchBooks()" style="cursor:pointer">🔍</span>
+  <div id="suggestions" class="suggestions"></div>
+</div>
 </div>
 <div class="grid">
+ 
   <!-- Nursery -->
   <div class="card" data-class="nursery" data-subject="english">
     <img src="nureng.jpg">
-    <div class="title">Nursery English Book</div>
+    <div class="title">Nursery English  Learning Book</div>
     <div class="price">₹120</div>
   </div>
 
   <!-- LKG -->
-  <div class="card" data-class="lkg" data-subject="english">
-    <img src="lkgeng.jpg">
-    <div class="title">LKG English Book</div>
-    <div class="price">₹140</div>
-  </div>
+<div class="card" data-class="lkg" data-subject="english">
+  <img src="lkgeng.jpg">
+  <div class="title">LKG English Book</div>
+  <div class="price">₹140</div>
+</div>
 
-  <!-- UKG -->
-  <div class="card" data-class="ukg" data-subject="english">
-    <img src="ukgeng.jpg">
-    <div class="title">UKG English Book</div>
-    <div class="price">₹150</div>
-  </div>
-
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="english">
+  <img src="ukgeng.jpg">
+  <div class="title">UKG English Book</div>
+  <div class="price">₹150</div>
+</div>
   <!-- Class 1 -->
   <div class="card" data-class="1" data-subject="english">
     <img src="cls1eng.jpg">
-    <div class="title">Class 1 English Reader</div>
+    <div class="title">Class 1 English   Book</div>
     <div class="price">₹180</div>
   </div>
 
   <!-- Class 2 -->
   <div class="card" data-class="2" data-subject="english">
     <img src="cls2eng.jpg">
-    <div class="title">Class 2 English Reader</div>
+    <div class="title">Class 2 English   Book</div>
     <div class="price">₹190</div>
   </div>
 <!-- Class 3 -->
 <div class="card" data-class="3" data-subject="english">
   <img src="cls3eng.jpg">
-  <div class="title">Class 3 English Reader</div>
+  <div class="title">Class 3 English   Book</div>
   <div class="price">₹200</div>
 </div>
 
 <!-- Class 4 -->
 <div class="card" data-class="4" data-subject="english">
   <img src="cls4eng.jpg">
-  <div class="title">Class 4 English Reader</div>
+  <div class="title">Class 4 English   Book</div>
   <div class="price">₹210</div>
 </div>
 
 <!-- Class 5 -->
 <div class="card" data-class="5" data-subject="english">
   <img src="cls5eng.jpg">
-  <div class="title">Class 5 English Reader</div>
+  <div class="title">Class 5 English   Book</div>
   <div class="price">₹220</div>
 </div>
 
 <!-- Class 6 -->
 <div class="card" data-class="6" data-subject="english">
   <img src="cls6eng.jpg">
-  <div class="title">Class 6 English Reader</div>
+  <div class="title">Class 6 English   Book</div>
   <div class="price">₹230</div>
 </div>
 
 <!-- Class 7 -->
 <div class="card" data-class="7" data-subject="english">
   <img src="cls7eng.jpg">
-  <div class="title">Class 7 English Reader</div>
+  <div class="title">Class 7 English   Book</div>
   <div class="price">₹240</div>
 </div>
 
 <!-- Class 8 -->
 <div class="card" data-class="8" data-subject="english">
   <img src="cls8eng.jpg">
-  <div class="title">Class 8 English Reader</div>
+  <div class="title">Class 8 English   Book</div>
   <div class="price">₹250</div>
 </div>
 
 <!-- Class 9 -->
 <div class="card" data-class="9" data-subject="english">
   <img src="cls9eng.jpg">
-  <div class="title">Class 9 English Reader</div>
+  <div class="title">Class 9 English   Book</div>
   <div class="price">₹260</div>
 </div>
 
 <!-- Class 10 -->
 <div class="card" data-class="10" data-subject="english">
   <img src="cls10eng.jpg">
-  <div class="title">Class 10 English Reader</div>
+  <div class="title">Class 10 English   Book</div>
   <div class="price">₹280</div>
 </div>
 
 <!-- Class 11 -->
 <div class="card" data-class="11" data-subject="english">
   <img src="cls11eng.jpg">
-  <div class="title">Class 11th English Reader</div>
+  <div class="title">Class 11th English   Book</div>
   <div class="price">₹300</div>
 </div>
 
 <!-- Class 12 -->
 <div class="card" data-class="12" data-subject="english">
   <img src="cls12eng.jpg">
-  <div class="title">Class 12th English Reader</div>
+  <div class="title">Class 12th English   Book</div>
   <div class="price">₹320</div>
 </div>
-  
   <!-- Nursery -->
   <div class="card" data-class="nursery" data-subject="hindi">
     <img src="nurhnd.jpg">
-    <div class="title">Nursery Hindi Book</div>
+    <div class="title">Nursery Hindi Learning Book</div>
     <div class="price">₹120</div>
   </div>
-
   <!-- LKG -->
-  <div class="card" data-class="lkg" data-subject="hindi">
-    <img src="lkghnd.jpg">
-    <div class="title">LKG Hindi Book</div>
-    <div class="price">₹140</div>
-  </div>
+<div class="card" data-class="lkg" data-subject="hindi">
+  <img src="lkghnd.jpg">
+  <div class="title">LKG Hindi Book</div>
+  <div class="price">₹140</div>
+</div>
 
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="hindi">
+  <img src="ukghnd.jpg">
+  <div class="title">UKG Hindi Book</div>
+  <div class="price">₹150</div>
+</div>
   <!-- UKG -->
-  <div class="card" data-class="ukg" data-subject="hindi">
+  <div class="card" data-class="kg" data-subject="hindi">
     <img src="ukghnd.jpg">
-    <div class="title">UKG Hindi Book</div>
+    <div class="title">UKG Hindi Learning Book</div>
     <div class="price">₹150</div>
   </div>
 
   <!-- Class 1 -->
   <div class="card" data-class="1" data-subject="hindi">
     <img src="class1.jpg">
-    <div class="title">Class 1 Hindi Reader</div>
+    <div class="title">Class 1 Hindi   Book</div>
     <div class="price">₹180</div>
   </div>
 
   <!-- Class 2 -->
   <div class="card" data-class="2" data-subject="hindi">
     <img src="cls2hnd.jpg">
-    <div class="title">Class 2 Hindi Reader</div>
+    <div class="title">Class 2 Hindi   Book</div>
     <div class="price">₹190</div>
   </div>
 <!-- Class 3 -->
 <div class="card" data-class="3" data-subject="hindi">
   <img src="cls3hnd.jpg">
-  <div class="title">Class 3 Hindi Reader</div>
+  <div class="title">Class 3 Hindi   Book</div>
   <div class="price">₹200</div>
 </div>
 
 <!-- Class 4 -->
 <div class="card" data-class="4" data-subject="hindi">
   <img src="cls4hnd.jpg">
-  <div class="title">Class 4 Hindi Reader</div>
+  <div class="title">Class 4 Hindi   Book</div>
   <div class="price">₹210</div>
 </div>
 
 <!-- Class 5 -->
 <div class="card" data-class="5" data-subject="hindi">
   <img src="cls5hnd.jpg">
-  <div class="title">Class 5 Hindi Reader</div>
+  <div class="title">Class 5 Hindi   Book</div>
   <div class="price">₹220</div>
 </div>
 
 <!-- Class 6 -->
 <div class="card" data-class="6" data-subject="hindi">
   <img src="cls6hnd.jpg">
-  <div class="title">Class 6 Hindi Reader</div>
+  <div class="title">Class 6 Hindi   Book</div>
   <div class="price">₹230</div>
 </div>
 
 <!-- Class 7 -->
 <div class="card" data-class="7" data-subject="hindi">
   <img src="cls7hnd.jpg">
-  <div class="title">Class 7 Hindi Reader</div>
+  <div class="title">Class 7 Hindi   Book</div>
   <div class="price">₹240</div>
 </div>
 
 <!-- Class 8 -->
 <div class="card" data-class="8" data-subject="hindi">
   <img src="cls8hnd.jpg">
-  <div class="title">Class 8 Hindi Reader</div>
+  <div class="title">Class 8 Hindi   Book</div>
   <div class="price">₹250</div>
 </div>
 
 <!-- Class 9 -->
 <div class="card" data-class="9" data-subject="hindi">
   <img src="cls9hnd.jpg">
-  <div class="title">Class 9 Hindi Reader</div>
+  <div class="title">Class 9 Hindi   Book</div>
   <div class="price">₹260</div>
 </div>
 
 <!-- Class 10 -->
 <div class="card" data-class="10" data-subject="hindi">
   <img src="cls10hnd.jpg">
-  <div class="title">Class 10 Hindi Reader</div>
+  <div class="title">Class 10 Hindi   Book</div>
   <div class="price">₹280</div>
 </div>
 
 <!-- Class 11 -->
 <div class="card" data-class="11" data-subject="hindi">
   <img src="cls11hnd.jpg">
-  <div class="title">Class 11 Hindi Reader</div>
+  <div class="title">Class 11 Hindi   Book</div>
   <div class="price">₹300</div>
 </div>
 
 <!-- Class 12 -->
 <div class="card" data-class="12" data-subject="hindi">
   <img src="cls12hnd.jpg">
-  <div class="title">Class 12 Hindi Reader</div>
+  <div class="title">Class 12 Hindi   Book</div>
   <div class="price">₹320</div>
   </div>
   <!-- Nursery -->
@@ -444,14 +510,14 @@ body.dark .price{
 <!-- LKG -->
 <div class="card" data-class="lkg" data-subject="math">
   <img src="lkgmath.jpg">
-  <div class="title">LKG Maths Book</div>
+  <div class="title">LKG Math Book</div>
   <div class="price">₹140</div>
 </div>
 
 <!-- UKG -->
 <div class="card" data-class="ukg" data-subject="math">
   <img src="ukgmath.jpg">
-  <div class="title">UKG Maths Book</div>
+  <div class="title">UKG Math Book</div>
   <div class="price">₹150</div>
 </div>
 
@@ -945,7 +1011,6 @@ body.dark .price{
   <div class="title">Nursery Drawing & Colouring Book</div>
   <div class="price">₹120</div>
 </div>
-
 <!-- LKG -->
 <div class="card" data-class="lkg" data-subject="drawing">
   <img src="lkgdrw.jpg">
@@ -1463,88 +1528,14 @@ body.dark .price{
   <div class="price">₹270</div>
 </div>
 
-<script>
-(() => {
-  const params = new URLSearchParams(window.location.search);
 
-  const from = params.get("from");          // school
-  const to = params.get("to");
-  const clsParam = params.get("class");
-
-  const course = params.get("course");      // ba,bcom,bsc
-  const exam = params.get("exam");          // ssc,banking,railway
-  const category = params.get("category");  // religious
-  const subject = params.get("subject");    // english,math,...
-
-  const cards = document.querySelectorAll(".card");
-
-  // 🔒 pehle sab hide
-  cards.forEach(card => card.style.display = "none");
-
-  let anyFilter = false;
-
-  cards.forEach(card => {
-    let show = true;
-
-    /* ===== SCHOOL FILTER ===== */
-    if (clsParam || (from && to)) {
-      anyFilter = true;
-      if (!card.dataset.class) {
-        show = false;
-      } else {
-        if (clsParam) {
-          const allowed = clsParam.split(",");
-          if (!allowed.includes(card.dataset.class)) show = false;
-        } else {
-          const n = parseInt(card.dataset.class);
-          if (isNaN(n) || n < from || n > to) show = false;
-        }
-      }
-    }
-
-    /* ===== GRADUATION FILTER ===== */
-    if (course) {
-      anyFilter = true;
-      if (card.dataset.course !== course) show = false;
-    }
-
-    /* ===== EXAM FILTER (SSC / BANK / RAILWAY) ===== */
-    if (exam) {
-      anyFilter = true;
-      if (card.dataset.exam !== exam) show = false;
-    }
-
-    /* ===== HOLY / CATEGORY FILTER ===== */
-    if (category) {
-      anyFilter = true;
-      if (card.dataset.category !== category) show = false;
-    }
-
-    /* ===== SUBJECT FILTER ===== */
-    if (subject) {
-  anyFilter = true;
-
-  // subject must match
-  if (card.dataset.subject !== subject) {
-    show = false;
-  }
-}
-    if (show) card.style.display = "block";
-  });
-
-  // ❗ koi filter nahi → sab dikhao
-  if (!anyFilter) {
-    cards.forEach(card => card.style.display = "block");
-  }
-})();
-  </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
   const STOCKS = [
-    { cls: "limited-stock", text: "⏳  (Hurry!)", weight: 50 },
-    { cls: "in-stock", text: "✅ In Stock", weight: 45 },
-    { cls: "out-stock", text: "❌ Out of Stock", weight: 5 }
+    { cls: "limited-stock", text: " Hurry !! ", weight: 50 },
+    { cls: "in-stock", text: "In Stock", weight: 45 },
+    { cls: "out-stock", text: "Sold out", weight: 5 }
   ];
 
   function getRandomDelay(){
@@ -1589,19 +1580,292 @@ document.addEventListener("DOMContentLoaded", () => {
     setStock(); // first run
   }); });
 </script>
-  <!-- Theme Sync Only -->
-<script>
-window.onload = () => {
-  const savedMode = localStorage.getItem("theme");
+ 
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".card").forEach(card => {
 
+    if(card.querySelector(".stars")) return;
+
+    const stars = document.createElement("div");
+    stars.className = "stars";
+
+    const rating = (Math.random() * (5 - 4.2) + 4.2).toFixed(1);
+    const percent = (rating / 5) * 100;
+
+    stars.style.setProperty("--fill", percent + "%");
+
+    card.insertBefore(stars, card.querySelector(".price"));
+  });
+});
+</script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".card").forEach(card => {
+
+    const price = card.querySelector(".price");
+    if(!price || price.dataset.done) return;
+    price.dataset.done = "1";
+
+    // wrap price
+    const wrap = document.createElement("div");
+    wrap.className = "price-wrap";
+
+    // move price inside wrapper
+    price.parentNode.insertBefore(wrap, price);
+    wrap.appendChild(price);
+
+    // 🔥 random discount 20% – 50%
+    const discount = Math.floor(Math.random() * (10 - 20 + 1)) + 20;
+
+    const cut = document.createElement("span");
+    cut.className = "price-cut";
+    cut.innerText = `-${discount}%`;
+
+    wrap.appendChild(cut);
+  });ymm
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ===============================
+     🌙 THEME SYNC
+  =============================== */
+  const savedMode = localStorage.getItem("theme");
   if(savedMode === "light"){
     document.body.classList.remove("dark");
   }else{
     document.body.classList.add("dark");
   }
+
+  /* ===============================
+     📚 URL PARAMS (SCOPE)
+  =============================== */
+  const params = new URLSearchParams(window.location.search);
+
+  const from = params.get("from");
+  const to = params.get("to");
+  const fixedClass = params.get("class"); // nursery / lkg / ukg / 1
+  const fixedCategory = params.get("category");
+  const fixedSubject = params.get("subject");
+
+  const cards = document.querySelectorAll(".card");
+  const input = document.getElementById("searchInput");
+
+  /* ===============================
+     🔢 CLASS WORD MAP
+  =============================== */
+  const classWords = {
+    "1":"1","one":"1","first":"1","class 1":"1",
+    "2":"2","two":"2","second":"2","class 2":"2",
+    "3":"3","three":"3","third":"3","class 3":"3",
+    "4":"4","four":"4","fourth":"4","class 4":"4",
+    "5":"5","five":"5","fifth":"5","class 5":"5",
+
+    "6":"6","six":"6","sixth":"6","class 6":"6",
+    "7":"7","seven":"7","seventh":"7","class 7":"7",
+    "8":"8","eight":"8","eighth":"8","class 8":"8",
+
+    "9":"9","nine":"9","ninth":"9","class 9":"9",
+    "10":"10","ten":"10","tenth":"10","class 10":"10",
+
+    "11":"11","eleven":"11","class 11":"11",
+    "12":"12","twelve":"12","class 12":"12",
+
+    "nursery":"nursery",
+    "lkg":"lkg",
+    "ukg":"ukg"
+  };
+
+  /* ===============================
+     📘 SUBJECT WORD MAP
+  =============================== */
+  const subjectWords = {
+  // School
+  "english":"english","eng":"english",
+  "hindi":"hindi","hin":"hindi",
+  "math":"math","maths":"math","mathematics":"math",
+  "science":"science","sci":"science",
+  "evs":"evs","sst":"evs","social":"evs",
+  "computer":"computer","cs":"computer",
+  "gk":"gk","general":"gk",
+  "drawing":"drawing","art":"drawing",
+  "sanskrit":"sanskrit",
+  "grammar":"grammar",
+
+  // Exams
+  "reasoning":"reasoning",
+  "quant":"math",
+
+  // College
+  "physics":"physics",
+  "chemistry":"chemistry",
+  "biology":"biology",
+  "computer science":"computer",
+  "it":"it"
 };
-</script>
-</body>
+
+  /* ===============================
+     🔒 BASE FILTER (URL)
+  =============================== */
+ function applyBaseFilter(){
+  cards.forEach(card=>{
+    let show = true;
+
+    // ===== SCHOOL BOOKS =====
+if (params.get("school")) {
+
+  // school books (ALL nursery–12)
+  if (params.get("school") === "all") {
+    if (!card.dataset.class) show = false;
+  }
+}
+
+// fixed class (nursery / lkg / ukg / 1)
+if (fixedClass) {
+  if (card.dataset.class !== fixedClass) show = false;
+}
+
+// class range (1–12)
+if (from && to) {
+  const n = parseInt(card.dataset.class);
+  if (isNaN(n) || n < from || n > to) show = false;
+}
+
+    // COLLEGE
+if (params.get("course")) {
+
+  // college books (all)
+  if (params.get("course") === "all") {
+    if (!card.dataset.course) show = false;
+  }
+  // specific course (bsc / ba / bcom)
+  else {
+    if (card.dataset.course !== params.get("course")) show = false;
+  }
+}
+// KG GROUP (LKG + UKG)
+if (params.get("kg") === "all") {
+  if (
+    card.dataset.class !== "lkg" &&
+    card.dataset.class !== "ukg"
+  ) {
+    show = false;
+  }
+}
+    // EXAMS
+if (params.get("exam")) {
+
+  // exam books (all)
+  if (params.get("exam") === "all") {
+    if (!card.dataset.exam) show = false;
+  }
+  // specific exam (ssc / railway / banking)
+  else {
+    if (card.dataset.exam !== params.get("exam")) show = false;
+  }
+}
+    // HOLY ONLY
+    if(params.get("category") === "religious"){
+      if(card.dataset.category !== "religious") show = false;
+    }
+
+    // SUBJECT
+    if(fixedSubject && card.dataset.subject !== fixedSubject){
+      show = false;
+    }
+
+    card.style.display = show ? "block" : "none";
+  });
+}
+
+  applyBaseFilter();
+
+  /* ===============================
+     🔍 SMART COMBO SEARCH
+  =============================== */
+  window.searchBooks = function(){
+
+  applyBaseFilter();
+    const text = input.value.toLowerCase().trim();
+    const words = text.split(/\s+/);
+
+    let classFromSearch = null;
+    let subjectFromSearch = null;
+
+    words.forEach(w=>{
+      if(classWords[w]) classFromSearch = classWords[w];
+      if(subjectWords[w]) subjectFromSearch = subjectWords[w];
+    });
+    let visible = 0;
+
+    cards.forEach(card=>{
+      // ❌ agar base filter ne hide kiya hai, search use touch na kare
+if (card.style.display === "none") return;
+    
+      const cardClass = card.dataset.class;
+      const cardSubject = card.dataset.subject;
+      const title = card.querySelector(".title").innerText.toLowerCase();
+
+      // 🔢 class combo
+      if(classFromSearch && cardClass !== classFromSearch){
+        card.style.display = "none";
+        return;
+      }
+      // 📘 subject combo
+      if(subjectFromSearch && cardSubject !== subjectFromSearch){
+        card.style.display = "none";
+        return;
+      }
+      // 🧠 text match fallback (ONLY when no subject found)
+if(text && !subjectFromSearch){
+  const match = words.some(w => title.includes(w));
+  if(!match){
+    card.style.display = "none";
+    return;
+  }
+}
+      visible++;
+    });
+
+    if(visible === 0){
+      alert("No books found");
+    }
+  };
+  // 🔴 LIVE SEARCH (type as you go)
+if(input){
+  let timer;
+  input.addEventListener("input", () => {
+
+    clearTimeout(timer);
+
+    // thoda delay taaki typing smooth rahe
+    timer = setTimeout(() => {
+      searchBooks();   // 🔍 same safe function
+    }, 120);
+  });
+}
+  /* ⌨️ ENTER KEY SUPPORT */
+  if(input){
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();   // form submit / reload se bachao
+        searchBooks();        // 🔍 same function call
+      }
+    });
+  }
+  /* 🎯 PLACEHOLDER */
+  if(input){
+    if(from && to){
+      input.placeholder = `Search Class ${from}–${to} books…`;
+    }else if(fixedClass){
+      input.placeholder = `Search in ${fixedClass} books…`;
+    }
+  }
+});
 </script>
 </body>
 </html>
