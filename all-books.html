@@ -1,0 +1,2473 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<title>All Books | Bhagat Book Store</title>  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <style>  
+  .footer{  
+  margin-top:4px;  
+  background:var(--card);  
+  border-top:1px solid rgba(0,0,0,.08);  
+  text-align:center;  
+  padding:10px;  
+}  
+/* ===== THEME VARIABLES ===== */  
+:root{  
+  --bg:#f5f7fb;  
+  --card:#ffffff;  
+  --text:#222;  
+  --header:#2874f0;  
+}  
+  
+/* 🌙 DARK MODE */  
+body.dark{  
+  --bg:#0f172a;  
+  --card:#1e293b;  
+  --text:#e5e7eb;  
+  --header:#174ea6;  
+}  
+  
+*{box-sizing:border-box}  
+  
+body{  
+  margin:0;  
+  font-family:Segoe UI,Arial;  
+  background:var(--bg);  
+  color:var(--text);  
+  transition:.3s;  
+}  
+  
+/* ===== HEADER ===== */  
+.header{  
+  display:flex;  
+  align-items:center;  
+  gap:1px;  
+  padding:5px 2px;  
+  background:linear-gradient(
+    320deg,
+    #0b2540 0%,   /* deep navy blue */
+    #123d6b 40%,  /* dark blue */ /* rich yellow */
+  #1e6bb8 80%,
+#facc15 120%,
+#f59e0b 100%
+  );  
+  color:white;  
+  position:sticky;  
+  top:0;  
+  z-index:5;  
+}  
+    
+/* BACK ARROW */  
+.back{  
+  width:30px;  
+  height:30px;  
+  display:flex;  
+  align-items:center;  
+  justify-content:center;  
+  font-size:26px;  
+  font-weight:700;  
+  cursor:pointer;  
+  border-radius:1px;  
+}  
+.card{
+  display:none;   /* ❌ by default koi book nahi dikhegi */
+}
+  
+/* SEARCH BAR */  
+.search{  
+  flex:1;  
+  height:40px;  
+  background:rgba(255,255,255,.15);  
+  backdrop-filter:blur(6px);  
+  border-radius:16px;  
+  display:flex;  
+  align-items:center;  
+  gap:10px;  
+  padding:0 14px;  
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);  
+}  
+  
+body.dark .search{  
+  background:rgba(0,0,0,.35);  
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);  
+}  
+  
+.search-icon{  
+  font-size:17px;  
+  opacity:.75;  
+}  
+  
+.search input{  
+  flex:1;  
+  border:none;  
+  outline:none;  
+  background:transparent;  
+  color:white;  
+  font-size:15px;  
+}  
+  
+body.dark .search input{  
+  color:#e5e7eb;  
+}  
+  
+.search input::placeholder{  
+  color:rgba(255,255,255,.75);  
+}  
+  /* ===== IMAGE SHIMMER WRAP ===== */
+.img-wrap{
+  position:relative;
+  width:100%;
+  height:180px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#e5e7eb;
+}
+
+/* Dark mode */
+body.dark .img-wrap{
+  background:#1e293b;
+}
+
+/* ===== SHIMMER EFFECT ===== */
+.img-skeleton{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    100deg,
+    #e5e7eb 30%,
+    #f3f4f6 45%,
+    #e5e7eb 60%
+  );
+  animation:shimmer 5.2s infinite;
+}
+
+/* Dark mode shimmer */
+body.dark .img-skeleton{
+  background:linear-gradient(
+    100deg,
+    #1e293b 30%,
+    #334155 45%,
+    #1e293b 60%
+  );
+}
+
+/* Image inside wrap */
+.img-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  opacity:0;
+  transition:opacity .65s ease;
+}
+
+.img-wrap img.loaded{
+  opacity:1;
+}
+
+/* Animation */
+@keyframes shimmer{
+  0%{background-position:-400px 0}
+  100%{background-position:400px 0}
+}
+  
+/* ===== PRODUCT GRID ===== */  
+.grid{  
+  display:grid;  
+  grid-template-columns:repeat(2,1fr);  
+  gap:14px;  
+  padding:14px;  
+}  
+  
+.card{  
+  background:var(--card);  
+  border-radius:16px;  
+  padding:10px;  
+  box-shadow:0 6px 16px rgba(0,0,0,.08);  
+}  
+  
+.card img{  
+  width:100%;  
+  height:180px;  
+  object-fit:contain;  
+}  
+  
+.title{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:0;
+  line-height:1.15;   /* 👈 THIS IS KEY */
+}
+  
+.stars{
+  position:relative;
+  display:block;      /* 👈 inline-block hatao */
+  margin-top:0;
+  font-size:16px;
+  line-height:1;      /* 👈 extra vertical space remove */
+}
+.stars::before{
+  content:"★★★★★";
+  color:#d1d5db;
+}
+.stars::after{
+  content:"★★★★★";
+  position:absolute;
+  left:0;
+  top:0;
+  width:var(--fill, 0%);
+  overflow:hidden;
+  color:#fbbc04;
+}
+
+.price{
+  font-weight:800;
+  font-size:15px;
+  color:#16a34a;     /* clean green */
+  text-shadow:none;  /* neon disabled */
+}
+
+/* ===============================
+   PRICE – DARK MODE */
+body.dark .price{
+  color:#39ff14;
+  text-shadow:
+    0 0 10px rgba(57,255,20,0.6),
+    0 0 22px rgba(57,255,20,0.5),
+    0 0 36px rgba(57,255,20,0.4);
+  animation:neonPulse 2.8s ease-in-out infinite;
+}
+
+/* ===============================
+   NEON PULSE ANIMATION
+================================ */
+@keyframes neonPulse{
+  0%{
+    text-shadow:
+      0 0 8px rgba(57,255,20,.4),
+      0 0 18px rgba(57,255,20,.3),
+      0 0 28px rgba(57,255,20,.2);
+  }
+  50%{
+    text-shadow:
+      0 0 14px rgba(57,255,20,.9),
+      0 0 32px rgba(57,255,20,.7),
+      0 0 48px rgba(57,255,20,.6);
+  }
+  100%{
+    text-shadow:
+      0 0 8px rgba(57,255,20,.4),
+      0 0 18px rgba(57,255,20,.3),
+      0 0 28px rgba(57,255,20,.2);
+  }
+}
+
+/* ===============================
+   CUT PRICE (MRP)
+================================ */
+.price-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+/* 🔖 Discount badge – LIGHT MODE (default, no glow) */
+.price-cut{
+  font-size:8px;
+  font-weight:300;
+  padding:0.4px 4px;
+  border-radius:2px;
+  background:#ef4444;   /* normal red */
+  color:#fff;
+  box-shadow:none;      /* ❌ no glow */
+  animation:none;       /* ❌ no pulse */
+}
+  /* 🌙 DARK MODE – Glow ON */
+body.dark .price-cut{
+  background:#ff1744;
+  box-shadow:0 0 6px rgba(255,23,68,.7);
+  animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 4px rgba(255,23,68,.5)}
+  50%{box-shadow:0 0 10px rgba(255,23,68,.9)}
+  100%{box-shadow:0 0 4px rgba(255,23,68,.5)}
+}
+
+/* ===============================
+   MOBILE SAFETY (Glow cut fix)
+================================ */
+.card{
+  overflow:visible;
+}
+.cut{  
+  text-decoration:line-through;  
+  color:#888;  
+  font-size:8px;  
+  margin-left:4px; 
+margin-top:-1px;  
+}
+.card{
+  position:relative;
+  padding:10px;
+  padding-bottom:30px; /* 👈 badge ke liye jagah */
+}
+
+.stock-badge{
+  position:absolute;
+  left:0;
+  bottom:0;
+
+  width:100%;          /* 🔥 full card width */
+  height:25px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:12px;
+  font-weight:800;
+
+  border-radius:0 0 16px 16px; /* card ke niche chipka hua */
+}
+.in-stock{background:#22c55e;color:white;}
+.limited-stock{background:#f59e0b;color:white;}
+.out-stock{background:#ef4444;color:white;}
+}
+</style>
+</head> 
+<body class="dark">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="back" onclick="history.back()">⬅</div>
+  <div class="search">
+  <input
+    id="searchInput"
+    type="text"
+    placeholder="Search books…"
+    autocomplete="off">
+  <span onclick="searchBooks()" style="cursor:pointer">🔍</span>
+  <div id="suggestions" class="suggestions"></div>
+</div>
+</div>
+<div class="grid">
+  <!-- Nursery -->
+<div class="card" data-class="nursery" data-subject="rhymes">
+  <img src="nurrhymes.jpg">
+  <div class="title">Nursery Rhymes Book</div>
+  <div class="price">₹120</div>
+</div>
+
+<!-- LKG -->
+<div class="card" data-class="lkg" data-subject="rhymes">
+  <img src="lkgrhymes.jpg">
+  <div class="title">LKG Rhymes Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="rhymes">
+  <img src="ukgrhymes.jpg">
+  <div class="title">UKG Rhymes Book</div>
+  <div class="price">₹150</div>
+</div>
+
+<!-- Class 1 -->
+<div class="card" data-class="1" data-subject="rhymes">
+  <img src="cls1rhymes.jpg">
+  <div class="title">Class 1 Rhymes Book</div>
+  <div class="price">₹170</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="rhymes">
+  <img src="cls2rhymes.jpg">
+  <div class="title">Class 2 Rhymes Book</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="rhymes">
+  <img src="cls3rhymes.jpg">
+  <div class="title">Class 3 Rhymes Book</div>
+  <div class="price">₹190</div>
+</div>
+  <!-- Nursery -->
+  <div class="card" data-class="nursery" data-subject="english">
+    <img src="nureng.jpg">
+    <div class="title">Nursery English  Learning Book</div>
+    <div class="price">₹120</div>
+  </div>
+
+  <!-- LKG -->
+<div class="card" data-class="lkg" data-subject="english">
+  <img src="lkgeng.jpg">
+  <div class="title">LKG English Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="english">
+  <img src="ukgeng.jpg">
+  <div class="title">UKG English Book</div>
+  <div class="price">₹150</div>
+</div>
+  <!-- Class 1 -->
+  <div class="card" data-class="1" data-subject="english">
+    <img src="cls1eng.jpg">
+    <div class="title">Class 1 English   Book</div>
+    <div class="price">₹180</div>
+  </div>
+
+  <!-- Class 2 -->
+  <div class="card" data-class="2" data-subject="english">
+    <img src="cls2eng.jpg">
+    <div class="title">Class 2 English   Book</div>
+    <div class="price">₹190</div>
+  </div>
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="english">
+  <img src="cls3eng.jpg">
+  <div class="title">Class 3 English   Book</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="english">
+  <img src="cls4eng.jpg">
+  <div class="title">Class 4 English   Book</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="english">
+  <img src="cls5eng.jpg">
+  <div class="title">Class 5 English   Book</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="english">
+  <img src="cls6eng.jpg">
+  <div class="title">Class 6 English   Book</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="english">
+  <img src="cls7eng.jpg">
+  <div class="title">Class 7 English   Book</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="english">
+  <img src="cls8eng.jpg">
+  <div class="title">Class 8 English   Book</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="english">
+  <img src="cls9eng.jpg">
+  <div class="title">Class 9 English   Book</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="english">
+  <img src="cls10eng.jpg">
+  <div class="title">Class 10 English   Book</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="english">
+  <img src="cls11eng.jpg">
+  <div class="title">Class 11th English   Book</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="english">
+  <img src="cls12eng.jpg">
+  <div class="title">Class 12th English   Book</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- Nursery -->
+  <div class="card" data-class="nursery" data-subject="hindi">
+    <img src="nurhnd.jpg">
+    <div class="title">Nursery Hindi Learning Book</div>
+    <div class="price">₹120</div>
+  </div>
+  <!-- LKG -->
+<div class="card" data-class="lkg" data-subject="hindi">
+  <img src="lkghnd.jpg">
+  <div class="title">LKG Hindi Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="hindi">
+  <img src="ukghnd.jpg">
+  <div class="title">UKG Hindi Book</div>
+  <div class="price">₹150</div>
+</div>
+  <!-- UKG -->
+  <div class="card" data-class="ukg" data-subject="hindi">
+    <img src="ukghnd.jpg">
+    <div class="title">UKG Hindi Learning Book</div>
+    <div class="price">₹150</div>
+  </div>
+
+  <!-- Class 1 -->
+  <div class="card" data-class="1" data-subject="hindi">
+    <img src="class1.jpg">
+    <div class="title">Class 1 Hindi   Book</div>
+    <div class="price">₹180</div>
+  </div>
+
+  <!-- Class 2 -->
+  <div class="card" data-class="2" data-subject="hindi">
+    <img src="cls2hnd.jpg">
+    <div class="title">Class 2 Hindi   Book</div>
+    <div class="price">₹190</div>
+  </div>
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="hindi">
+  <img src="cls3hnd.jpg">
+  <div class="title">Class 3 Hindi   Book</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="hindi">
+  <img src="cls4hnd.jpg">
+  <div class="title">Class 4 Hindi   Book</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="hindi">
+  <img src="cls5hnd.jpg">
+  <div class="title">Class 5 Hindi   Book</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="hindi">
+  <img src="cls6hnd.jpg">
+  <div class="title">Class 6 Hindi   Book</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="hindi">
+  <img src="cls7hnd.jpg">
+  <div class="title">Class 7 Hindi   Book</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="hindi">
+  <img src="cls8hnd.jpg">
+  <div class="title">Class 8 Hindi   Book</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="hindi">
+  <img src="cls9hnd.jpg">
+  <div class="title">Class 9 Hindi   Book</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="hindi">
+  <img src="cls10hnd.jpg">
+  <div class="title">Class 10 Hindi   Book</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="hindi">
+  <img src="cls11hnd.jpg">
+  <div class="title">Class 11 Hindi   Book</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="hindi">
+  <img src="cls12hnd.jpg">
+  <div class="title">Class 12 Hindi   Book</div>
+  <div class="price">₹320</div>
+  </div>
+  <!-- Nursery -->
+<div class="card" data-class="nursery" data-subject="math">
+  <img src="nurmath.jpg">
+  <div class="title">Nursery Maths Book</div>
+  <div class="price">₹120</div>
+</div>
+
+<!-- LKG -->
+<div class="card" data-class="lkg" data-subject="math">
+  <img src="lkgmath.jpg">
+  <div class="title">LKG Math Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="math">
+  <img src="ukgmath.jpg">
+  <div class="title">UKG Math Book</div>
+  <div class="price">₹150</div>
+</div>
+
+<!-- Class 1 -->
+<div class="card" data-class="1" data-subject="math">
+  <img src="cls1math.jpg">
+  <div class="title">Class 1 Mathematics</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="math">
+  <img src="cls2math.jpg">
+  <div class="title">Class 2 Mathematics</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="math">
+  <img src="cls3math.jpg">
+  <div class="title">Class 3 Mathematics</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="math">
+  <img src="cls4math.jpg">
+  <div class="title">Class 4 Mathematics</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="math">
+  <img src="cls5math.jpg">
+  <div class="title">Class 5 Mathematics</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="math">
+  <img src="cls6math.jpg">
+  <div class="title">Class 6 Mathematics</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="math">
+  <img src="cls7math.jpg">
+  <div class="title">Class 7 Mathematics</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="math">
+  <img src="cls8math.jpg">
+  <div class="title">Class 8 Mathematics</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="math">
+  <img src="cls9math.jpg">
+  <div class="title">Class 9 Mathematics</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="math">
+  <img src="cls10math.jpg">
+  <div class="title">Class 10 Mathematics</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="math">
+  <img src="cls11math.jpg">
+  <div class="title">Class 11 Mathematics</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="math">
+  <img src="cls12math.jpg">
+  <div class="title">Class 12 Mathematics</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- Nursery -->
+<div class="card" data-class="nursery" data-subject="evs">
+  <img src="nurevs.jpg">
+  <div class="title">Nursery EVS Book</div>
+  <div class="price">₹120</div>
+</div>
+
+<!-- LKG -->
+<div class="card" data-class="lkg" data-subject="evs">
+  <img src="lkgevs.jpg">
+  <div class="title">LKG EVS Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="evs">
+  <img src="ukgevs.jpg">
+  <div class="title">UKG EVS Book</div>
+  <div class="price">₹150</div>
+</div>
+
+<!-- Class 1 -->
+<div class="card" data-class="1" data-subject="sst">
+  <img src="cls1evs.jpg">
+  <div class="title">Class 1 Social Studies</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="sst">
+  <img src="cls2evs.jpg">
+  <div class="title">Class 2 Social Studies</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="sst">
+  <img src="cls3evs.jpg">
+  <div class="title">Class 3 Social Studies</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="sst">
+  <img src="cls4evs.jpg">
+  <div class="title">Class 4 Social Studies</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="sst">
+  <img src="cls5evs.jpg">
+  <div class="title">Class 5 Social Studies</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="sst">
+  <img src="cls6evs.jpg">
+  <div class="title">Class 6 Social Studies</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="sst">
+  <img src="cls7evs.jpg">
+  <div class="title">Class 7 Social Studies</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="sst">
+  <img src="cls8evs.jpg">
+  <div class="title">Class 8 Social Studies</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="sst">
+  <img src="cls9evs.jpg">
+  <div class="title">Class 9 Social Studies</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="sst">
+  <img src="cls10evs.jpg">
+  <div class="title">Class 10 Social Studies</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="sst">
+  <img src="cls11evs.jpg">
+  <div class="title">Class 11 Social Studies</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="sst">
+  <img src="cls12evs.jpg">
+  <div class="title">Class 12 Social Studies</div>
+  <div class="price">₹320</div>
+</div>
+
+<!-- Class 1 -->
+<div class="card" data-class="1" data-subject="science">
+  <img src="cls1sci.jpg">
+  <div class="title">Class 1 Science</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="science">
+  <img src="cls2sci.jpg">
+  <div class="title">Class 2 Science</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="science">
+  <img src="cls3sci.jpg">
+  <div class="title">Class 3 Science</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="science">
+  <img src="cls4sci.jpg">
+  <div class="title">Class 4 Science</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="science">
+  <img src="cls5sci.jpg">
+  <div class="title">Class 5 Science</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="science">
+  <img src="cls6sci.jpg">
+  <div class="title">Class 6 Science</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="science">
+  <img src="cls7sci.jpg">
+  <div class="title">Class 7 Science</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="science">
+  <img src="cls8sci.jpg">
+  <div class="title">Class 8 Science</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="science">
+  <img src="cls9sci.jpg">
+  <div class="title">Class 9 Science</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="science">
+  <img src="cls10sci.jpg">
+  <div class="title">Class 10 Science</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="science">
+  <img src="cls11sci.jpg">
+  <div class="title">Class 11 Science</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="science">
+  <img src="cls12sci.jpg">
+  <div class="title">Class 12 Science</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- Class 1 -->
+<div class="card" data-class="1" data-subject="grammar">
+  <img src="cls1grm.jpg">
+  <div class="title">Class 1 English Grammar</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="grammar">
+  <img src="cls2grm.jpg">
+  <div class="title">Class 2 English Grammar</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="grammar">
+  <img src="cls3grm.jpg">
+  <div class="title">Class 3 English Grammar</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="grammar">
+  <img src="cls4grm.jpg">
+  <div class="title">Class 4 English Grammar</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="grammar">
+  <img src="cls5grm.jpg">
+  <div class="title">Class 5 English Grammar</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="grammar">
+  <img src="cls6grm.jpg">
+  <div class="title">Class 6 English Grammar</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="grammar">
+  <img src="cls7grm.jpg">
+  <div class="title">Class 7 English Grammar</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="grammar">
+  <img src="cls8grm.jpg">
+  <div class="title">Class 8 English Grammar</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="grammar">
+  <img src="cls9grm.jpg">
+  <div class="title">Class 9 English Grammar</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="grammar">
+  <img src="cls10grm.jpg">
+  <div class="title">Class 10 English Grammar</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="grammar">
+  <img src="cls11grm.jpg">
+  <div class="title">Class 11 English Grammar</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="grammar">
+  <img src="cls12grm.jpg">
+  <div class="title">Class 12 English Grammar</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- Class 1 -->
+<div class="card" data-class="1" data-subject="hindigrammar">
+  <img src="cls1hngrm.jpg">
+  <div class="title">Class 1 Hindi Grammar</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="hindigrammar">
+  <img src="cls2hngrm.jpg">
+  <div class="title">Class 2 Hindi Grammar</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="hindigrammar">
+  <img src="cls3hngrm.jpg">
+  <div class="title">Class 3 Hindi Grammar</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="hindigrammar">
+  <img src="cls4hngrm.jpg">
+  <div class="title">Class 4 Hindi Grammar</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="hindigrammar">
+  <img src="cls5hngrm.jpg">
+  <div class="title">Class 5 Hindi Grammar</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="hindigrammar">
+  <img src="cls6hngrm.jpg">
+  <div class="title">Class 6 Hindi Grammar</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="hindigrammar">
+  <img src="cls7hngrm.jpg">
+  <div class="title">Class 7 Hindi Grammar</div>
+  <div class="price">₹240</div>
+</div>
+  <!-- Class 8 -->
+<div class="card" data-class="8" data-subject="hindigrammar">
+  <img src="cls8hngrm.jpg">
+  <div class="title">Class 8 Hindi Grammar</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="hindigrammar">
+  <img src="cls9hngrm.jpg">
+  <div class="title">Class 9 Hindi Grammar</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="hindigrammar">
+  <img src="cls10hngrm.jpg">
+  <div class="title">Class 10 Hindi Grammar</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="hindigrammar">
+  <img src="cls11hngrm.jpg">
+  <div class="title">Class 11 Hindi Grammar</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="hindigrammar">
+  <img src="cls12hngrm.jpg">
+  <div class="title">Class 12 Hindi Grammar</div>
+  <div class="price">₹320</div>
+</div>
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="sanskrit">
+  <img src="cls6snk.jpg">
+  <div class="title">Class 6 Sanskrit</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="sanskrit">
+  <img src="cls7snk.jpg">
+  <div class="title">Class 7 Sanskrit</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="sanskrit">
+  <img src="cls8snk.jpg">
+  <div class="title">Class 8 Sanskrit</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="sanskrit">
+  <img src="cls9snk.jpg">
+  <div class="title">Class 9 Sanskrit</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Class 10 -->
+<div class="card" data-class="10" data-subject="sanskrit">
+  <img src="cls10snk.jpg">
+  <div class="title">Class 10 Sanskrit</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Class 11 -->
+<div class="card" data-class="11" data-subject="sanskrit">
+  <img src="cls11snk.jpg">
+  <div class="title">Class 11 Sanskrit</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Class 12 -->
+<div class="card" data-class="12" data-subject="sanskrit">
+  <img src="cls12snk.jpg">
+  <div class="title">Class 12 Sanskrit</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- Class 12 -->
+<div class="card" data-class="12" data-subject="kcsinha">
+  <img src="cls12kc.jpeg">
+  <div class="title">Class 12th KC Sinha Maths</div>
+  <div class="price">₹820</div>
+</div>
+  <!-- Nursery -->
+<div class="card" data-class="nursery" data-subject="drawing">
+  <img src="nurdrw.jpg">
+  <div class="title">Nursery Drawing & Colouring Book</div>
+  <div class="price">₹120</div>
+</div>
+<!-- LKG -->
+<div class="card" data-class="lkg" data-subject="drawing">
+  <img src="lkgdrw.jpg">
+  <div class="title">LKG Drawing Book</div>
+  <div class="price">₹140</div>
+</div>
+
+<!-- UKG -->
+<div class="card" data-class="ukg" data-subject="drawing">
+  <img src="ukgdrw.jpg">
+  <div class="title">UKG Drawing Book</div>
+  <div class="price">₹150</div>
+</div>
+
+<!-- Class 1 -->
+<div class="card" data-class="1" data-subject="drawing">
+  <img src="cls1drw.jpg">
+  <div class="title">Class 1 Drawing Book</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="drawing">
+  <img src="cls2drw.jpg">
+  <div class="title">Class 2 Drawing Book</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="drawing">
+  <img src="cls3drw.jpg">
+  <div class="title">Class 3 Drawing Book</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="drawing">
+  <img src="cls4drw.jpg">
+  <div class="title">Class 4 Drawing Book</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="drawing">
+  <img src="cls5drw.jpg">
+  <div class="title">Class 5 Drawing Book</div>
+  <div class="price">₹220</div>
+</div>
+  <!-- Class 1 -->
+<div class="card" data-class="1" data-subject="computer">
+  <img src="cls1com.jpg">
+  <div class="title">Class 1 Computer Book</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Class 2 -->
+<div class="card" data-class="2" data-subject="computer">
+  <img src="cls2com.jpg">
+  <div class="title">Class 2 Computer Book</div>
+  <div class="price">₹190</div>
+</div>
+
+<!-- Class 3 -->
+<div class="card" data-class="3" data-subject="computer">
+  <img src="cls3com.jpg">
+  <div class="title">Class 3 Computer Book</div>
+  <div class="price">₹200</div>
+</div>
+
+<!-- Class 4 -->
+<div class="card" data-class="4" data-subject="computer">
+  <img src="cls4com.jpg">
+  <div class="title">Class 4 Computer Book</div>
+  <div class="price">₹210</div>
+</div>
+
+<!-- Class 5 -->
+<div class="card" data-class="5" data-subject="computer">
+  <img src="cls5com.jpg">
+  <div class="title">Class 5 Computer Book</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Class 6 -->
+<div class="card" data-class="6" data-subject="computer">
+  <img src="cls6com.jpg">
+  <div class="title">Class 6 Computer Book</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Class 7 -->
+<div class="card" data-class="7" data-subject="computer">
+  <img src="cls7com.jpg">
+  <div class="title">Class 7 Computer Book</div>
+  <div class="price">₹240</div>
+</div>
+
+<!-- Class 8 -->
+<div class="card" data-class="8" data-subject="computer">
+  <img src="cls8com.jpg">
+  <div class="title">Class 8 Computer Book</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Class 9 -->
+<div class="card" data-class="9" data-subject="computer">
+  <img src="cls9com.jpg">
+  <div class="title">Class 9 Computer Book</div>
+  <div class="price">₹260</div>
+</div>
+  <div class="card" data-class="10" data-subject="computer">
+  <img src="cls10com.jpg">
+  <div class="title">Class 10 Computer Book</div>
+  <div class="price">₹260</div>
+</div>
+    <div class="card" data-class="11" data-subject="computer">
+  <img src="cls11com.jpg">
+  <div class="title">Class 11 Computer Book</div>
+  <div class="price">₹260</div>
+</div>
+    <div class="card" data-class="12" data-subject="computer">
+  <img src="cls12com.jpg">
+  <div class="title">Class 12 Computer Book</div>
+  <div class="price">₹260</div>
+</div>
+  <!-- SSC math -->
+  <div class="card" data-exam="ssc" data-subject="math">
+  <img src="bankmath.jpg">
+  <div class="title">SSC Quantitative Aptitude</div>
+  <div class="price">₹360</div>
+</div>
+<!-- SSC English -->
+<div class="card" data-exam="ssc" data-subject="english">
+  <img src="bankeng.jpg">
+  <div class="title">SSC English</div>
+  <div class="price">₹340</div>
+</div>
+<!-- SSC Reasoning -->
+<div class="card" data-exam="ssc" data-subject="reasoning">
+  <img src="bankreas.jpg">
+  <div class="title">SSC Reasoning</div>
+  <div class="price">₹350</div>
+</div>
+
+<!-- SSC GK / GS -->
+<div class="card" data-exam="ssc" data-subject="gk">
+  <img src="bankgk.jpg">
+  <div class="title">SSC GK / GS</div>
+  <div class="price">₹330</div>
+</div>
+  
+  <!-- Banking Maths -->
+<div class="card" data-exam="banking" data-subject="math">
+  <img src="bankmath.jpg">
+  <div class="title">Banking Quantitative Aptitude</div>
+  <div class="price">₹360</div>
+</div>
+
+<!-- Banking English -->
+<div class="card" data-exam="banking" data-subject="english">
+  <img src="bankeng.jpg">
+  <div class="title">Banking English</div>
+  <div class="price">₹340</div>
+</div>
+
+<!-- Banking Reasoning -->
+<div class="card" data-exam="banking" data-subject="reasoning">
+  <img src="bankreas.jpg">
+  <div class="title">Banking Reasoning</div>
+  <div class="price">₹350</div>
+</div>
+
+<!-- Banking GK / GS -->
+<div class="card" data-exam="banking" data-subject="gk">
+  <img src="bankgk.jpg">
+  <div class="title">Banking GK / GS</div>
+  <div class="price">₹330</div>
+</div>
+  <!-- Railway Maths -->
+<div class="card" data-exam="railway" data-subject="math">
+  <img src="railmath.jpg">
+  <div class="title">Railway Maths</div>
+  <div class="price">₹340</div>
+</div>
+
+<!-- Railway Reasoning -->
+<div class="card" data-exam="railway" data-subject="reasoning">
+  <img src="railreas.jpg">
+  <div class="title">Railway Reasoning</div>
+  <div class="price">₹330</div>
+</div>
+
+<!-- Railway GK / GS -->
+<div class="card" data-exam="railway" data-subject="gk">
+  <img src="railgk.jpg">
+  <div class="title">Railway GK / GS</div>
+  <div class="price">₹320</div>
+</div>
+  <!-- B.Sc Physics -->
+<div class="card" data-course="bsc" data-subject="physics">
+  <img src="bsc_physics.jpg">
+  <div class="title">B.Sc Physics</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.Sc Chemistry -->
+<div class="card" data-course="bsc" data-subject="chemistry">
+  <img src="bsc_chemistry.jpg">
+  <div class="title">B.Sc Chemistry</div>
+  <div class="price">₹430</div>
+</div>
+
+<!-- B.Sc Mathematics -->
+<div class="card" data-course="bsc" data-subject="math">
+  <img src="bsc_math.jpg">
+  <div class="title">B.Sc Mathematics</div>
+  <div class="price">₹410</div>
+</div>
+
+<!-- B.Sc Biology -->
+<div class="card" data-course="bsc" data-subject="biology">
+  <img src="bsc_biology.jpg">
+  <div class="title">B.Sc Biology</div>
+  <div class="price">₹400</div>
+</div>
+
+<!-- B.Sc Biotechnology -->
+<div class="card" data-course="bsc" data-subject="biotechnology">
+  <img src="bsc_biotech.jpg">
+  <div class="title">B.Sc Biotechnology</div>
+  <div class="price">₹450</div>
+</div>
+
+<!-- B.Sc Microbiology -->
+<div class="card" data-course="bsc" data-subject="microbiology">
+  <img src="bsc_micro.jpg">
+  <div class="title">B.Sc Microbiology</div>
+  <div class="price">₹440</div>
+</div>
+
+<!-- B.Sc Environmental Science -->
+<div class="card" data-course="bsc" data-subject="environment">
+  <img src="bsc_env.jpg">
+  <div class="title">B.Sc Environmental Science</div>
+  <div class="price">₹390</div>
+</div>
+
+<!-- B.Sc Computer Science -->
+<div class="card" data-course="bsc" data-subject="cs">
+  <img src="bsc_cs.jpg">
+  <div class="title">B.Sc Computer Science</div>
+  <div class="price">₹460</div>
+</div>
+
+<!-- B.Sc Information Technology -->
+<div class="card" data-course="bsc" data-subject="it">
+  <img src="bsc_it.jpg">
+  <div class="title">B.Sc Information Technology</div>
+  <div class="price">₹450</div>
+</div>
+
+<!-- B.Sc Geography -->
+<div class="card" data-course="bsc" data-subject="geography">
+  <img src="bsc_geo.jpg">
+  <div class="title">B.Sc Geography</div>
+  <div class="price">₹380</div>
+</div>
+
+<!-- B.Sc Statistics -->
+<div class="card" data-course="bsc" data-subject="statistics">
+  <img src="bsc_stats.jpg">
+  <div class="title">B.Sc Statistics</div>
+  <div class="price">₹420</div>
+</div>
+  <!-- B.A Hindi -->
+<div class="card" data-course="ba" data-subject="hindi">
+  <img src="ba_hindi.jpg">
+  <div class="title">B.A Hindi</div>
+  <div class="price">₹380</div>
+</div>
+
+<!-- B.A English -->
+<div class="card" data-course="ba" data-subject="english">
+  <img src="ba_english.jpg">
+  <div class="title">B.A English</div>
+  <div class="price">₹390</div>
+</div>
+
+<!-- B.A History -->
+<div class="card" data-course="ba" data-subject="history">
+  <img src="ba_history.jpg">
+  <div class="title">B.A History</div>
+  <div class="price">₹400</div>
+</div>
+
+<!-- B.A Political Science -->
+<div class="card" data-course="ba" data-subject="political">
+  <img src="ba_political.jpg">
+  <div class="title">B.A Political Science</div>
+  <div class="price">₹410</div>
+</div>
+
+<!-- B.A Geography -->
+<div class="card" data-course="ba" data-subject="geography">
+  <img src="ba_geography.jpg">
+  <div class="title">B.A Geography</div>
+  <div class="price">₹390</div>
+</div>
+
+<!-- B.A Economics -->
+<div class="card" data-course="ba" data-subject="economics">
+  <img src="ba_economics.jpg">
+  <div class="title">B.A Economics</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.A Sociology -->
+<div class="card" data-course="ba" data-subject="sociology">
+  <img src="ba_sociology.jpg">
+  <div class="title">B.A Sociology</div>
+  <div class="price">₹400</div>
+</div>
+
+<!-- B.A Psychology -->
+<div class="card" data-course="ba" data-subject="psychology">
+  <img src="ba_psychology.jpg">
+  <div class="title">B.A Psychology</div>
+  <div class="price">₹430</div>
+</div>
+
+<!-- B.A Philosophy -->
+<div class="card" data-course="ba" data-subject="philosophy">
+  <img src="ba_philosophy.jpg">
+  <div class="title">B.A Philosophy</div>
+  <div class="price">₹410</div>
+</div>
+
+<!-- B.A Public Administration -->
+<div class="card" data-course="ba" data-subject="publicadmin">
+  <img src="ba_public_admin.jpg">
+  <div class="title">B.A Public Administration</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.A Education -->
+<div class="card" data-course="ba" data-subject="education">
+  <img src="ba_education.jpg">
+  <div class="title">B.A Education</div>
+  <div class="price">₹390</div>
+</div>
+
+<!-- B.A Home Science -->
+<div class="card" data-course="ba" data-subject="homescience">
+  <img src="ba_home_science.jpg">
+  <div class="title">B.A Home Science</div>
+  <div class="price">₹370</div>
+  </div>
+  <!-- B.Com Accounting -->
+<div class="card" data-course="bcom" data-subject="accounting">
+  <img src="bcom_accounting.jpg">
+  <div class="title">B.Com Accounting</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.Com Financial Accounting -->
+<div class="card" data-course="bcom" data-subject="financialaccounting">
+  <img src="bcom_fin_accounting.jpg">
+  <div class="title">B.Com Financial Accounting</div>
+  <div class="price">₹430</div>
+</div>
+
+<!-- B.Com Business Economics -->
+<div class="card" data-course="bcom" data-subject="businesseconomics">
+  <img src="bcom_economics.jpg">
+  <div class="title">B.Com Business Economics</div>
+  <div class="price">₹410</div>
+</div>
+
+<!-- B.Com Business Law -->
+<div class="card" data-course="bcom" data-subject="businesslaw">
+  <img src="bcom_business_law.jpg">
+  <div class="title">B.Com Business Law</div>
+  <div class="price">₹440</div>
+</div>
+
+<!-- B.Com Cost Accounting -->
+<div class="card" data-course="bcom" data-subject="costaccounting">
+  <img src="bcom_cost_accounting.jpg">
+  <div class="title">B.Com Cost Accounting</div>
+  <div class="price">₹450</div>
+</div>
+
+<!-- B.Com Income Tax -->
+<div class="card" data-course="bcom" data-subject="incometax">
+  <img src="bcom_income_tax.jpg">
+  <div class="title">B.Com Income Tax</div>
+  <div class="price">₹430</div>
+</div>
+
+<!-- B.Com Auditing -->
+<div class="card" data-course="bcom" data-subject="auditing">
+  <img src="bcom_auditing.jpg">
+  <div class="title">B.Com Auditing</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.Com Company Law -->
+<div class="card" data-course="bcom" data-subject="companylaw">
+  <img src="bcom_company_law.jpg">
+  <div class="title">B.Com Company Law</div>
+  <div class="price">₹440</div>
+</div>
+
+<!-- B.Com Management Principles -->
+<div class="card" data-course="bcom" data-subject="management">
+  <img src="bcom_management.jpg">
+  <div class="title">B.Com Principles of Management</div>
+  <div class="price">₹400</div>
+</div>
+
+<!-- B.Com Statistics -->
+<div class="card" data-course="bcom" data-subject="statistics">
+  <img src="bcom_statistics.jpg">
+  <div class="title">B.Com Statistics</div>
+  <div class="price">₹410</div>
+</div>
+
+<!-- B.Com Banking & Insurance -->
+<div class="card" data-course="bcom" data-subject="insurance">
+  <img src="bcom_banking.jpg">
+  <div class="title">B.Com Banking & Insurance</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- B.Com Entrepreneurship -->
+<div class="card" data-course="bcom" data-subject="entrepreneurship">
+  <img src="bcom_entrepreneurship.jpg">
+  <div class="title">B.Com Entrepreneurship</div>
+  <div class="price">₹390</div>
+</div>
+  <!-- Aarti Sangrah -->
+<div class="card" data-category="religious" data-subject="aarti">
+  <img src="aarti.jpg">
+  <div class="title">Aarti Sangrah</div>
+  <div class="price">₹120</div>
+</div>
+  <!-- JEE Book 1 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jee mains advanced physics chemistry maths">
+  <img src="jee-main.jpg" alt="JEE Main Book">
+  <div class="title">JEE Main & Advanced Complete Guide</div>
+  <div class="price">₹520</div>
+</div>
+
+<!-- JEE Book 2 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jee physics hc verma">
+  <img src="hc-verma.jpg" alt="HC Verma Physics">
+  <div class="title">Concepts of Physics – H.C. Verma</div>
+  <div class="price">₹480</div>
+</div>
+
+<!-- JEE Book 3 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jee maths cengage">
+  <img src="jee-maths.jpg" alt="JEE Maths">
+  <div class="title">JEE Mathematics (Cengage)</div>
+  <div class="price">₹550</div>
+</div>
+
+<!-- JEE Book 4 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jee chemistry organic inorganic">
+  <img src="jee-chemistry.jpg" alt="JEE Chemistry">
+  <div class="title">JEE Chemistry Complete Study</div>
+  <div class="price">₹510</div>
+</div>
+  <!-- JEE Book 5 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jee advanced problems">
+  <img src="jee-advanced.jpg" alt="JEE Advanced">
+  <div class="title">JEE Advanced Problem Solving</div>
+  <div class="price">₹560</div>
+</div>
+
+<!-- JEE Book 6 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="arihant jee maths">
+  <img src="arihant-maths.jpg" alt="Arihant Maths">
+  <div class="title">Arihant JEE Mathematics</div>
+  <div class="price">₹540</div>
+</div>
+
+<!-- JEE Book 7 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="irodov physics jee">
+  <img src="irodov.jpg" alt="Irodov Physics">
+  <div class="title">Problems in General Physics – I.E. Irodov</div>
+  <div class="price">₹590</div>
+</div>
+
+<!-- JEE Book 8 -->
+<div class="card"
+     data-category="competitive"
+     data-subject="jee"
+     data-keywords="jd lee chemistry jee">
+  <img src="jd-lee.jpg" alt="JD Lee Chemistry">
+  <div class="title">JD Lee – Inorganic Chemistry (JEE)</div>
+  <div class="price">₹610</div>
+</div>
+  <!-- NEET Book 1 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet biology physics chemistry">
+  <img src="neet-guide.jpg" alt="NEET Guide">
+  <div class="title">NEET Complete Preparation Guide</div>
+  <div class="price">₹490</div>
+</div>
+
+<!-- NEET Book 2 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet biology ncert">
+  <img src="neet-biology.jpg" alt="NEET Biology">
+  <div class="title">NEET Biology (NCERT Based)</div>
+  <div class="price">₹420</div>
+</div>
+
+<!-- NEET Book 3 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet physics">
+  <img src="neet-physics.jpg" alt="NEET Physics">
+  <div class="title">NEET Physics Simplified</div>
+  <div class="price">₹460</div>
+</div>
+
+<!-- NEET Book 4 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet chemistry">
+  <img src="neet-chemistry.jpg" alt="NEET Chemistry">
+  <div class="title">NEET Chemistry Complete Book</div>
+  <div class="price">₹470</div>
+</div>
+<!-- Nursing Book -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="nursing staff gnm anm bsc nursing medical">
+     
+  <img src="nursing.jpg" >
+  <div class="title">Nursing Exam Guide</div>
+  <div class="price">₹350</div>
+</div>
+  <!-- NEET Book 5 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet previous year questions">
+  <img src="neet-pyq.jpg" alt="NEET PYQ">
+  <div class="title">NEET Previous Years Question Papers</div>
+  <div class="price">₹450</div>
+</div>
+
+<!-- NEET Book 6 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="trueman biology neet">
+  <img src="trueman.jpg" alt="Trueman Biology">
+  <div class="title">Trueman’s Biology (NEET)</div>
+  <div class="price">₹520</div>
+</div>
+
+<!-- NEET Book 7 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet physics dc pandey">
+  <img src="dc-pandey.jpg" alt="DC Pandey NEET">
+  <div class="title">DC Pandey Physics for NEET</div>
+  <div class="price">₹500</div>
+</div>
+
+<!-- NEET Book 8 -->
+<div class="card"
+     data-category="medical"
+     data-subject="neet"
+     data-keywords="neet objective chemistry">
+  <img src="objective-chem.jpg" alt="Objective Chemistry">
+  <div class="title">Objective Chemistry for NEET</div>
+  <div class="price">₹480</div>
+</div>
+  <!-- Nursing Book 1 -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="nursing gnm anm staff nurse exam">
+  <img src="nursing-gnm.jpg">
+  <div class="title">GNM Nursing Exam Guide</div>
+  <div class="price">₹320</div>
+</div>
+
+<!-- Nursing Book 2 -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="staff nurse nursing exam aiims">
+  <img src="staff-nurse.jpg">
+  <div class="title">Staff Nurse Recruitment Book</div>
+  <div class="price">₹380</div>
+</div>
+
+<!-- Nursing Book 3 -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="anm nursing book">
+  <img src="anm.jpg" >
+  <div class="title">ANM Nursing Complete Guide</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Nursing Book 4 -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="bsc nursing medical">
+  <img src="bsc-nursing.jpg" >
+  <div class="title">B.Sc Nursing Entrance Book</div>
+  <div class="price">₹450</div>
+</div>
+
+<!-- Nursing Book 5 -->
+<div class="card"
+     data-category="medical"
+     data-subject="nursing"
+     data-keywords="aiims nursing exam">
+  <img src="aiims-nursing.jpg" >
+  <div class="title">AIIMS Nursing Exam Preparation</div>
+  <div class="price">₹420</div>
+</div>
+<!-- Puja Vidhi Book -->
+<div class="card" data-category="religious" data-subject="puja">
+  <img src="puja_vidhi.jpg">
+  <div class="title">Puja Vidhi Book</div>
+  <div class="price">₹150</div>
+</div>
+
+<!-- Satyanarayan Katha -->
+<div class="card" data-category="religious" data-subject="puja">
+  <img src="satyanarayan_katha.jpg">
+  <div class="title">Satyanarayan Puja Katha</div>
+  <div class="price">₹130</div>
+</div>
+
+<!-- Ramayan (Hindi) -->
+<div class="card" data-category="religious" data-subject="ramayan">
+  <img src="ramayan.jpg">
+  <div class="title">Shri Ramayan (Hindi)</div>
+  <div class="price">₹220</div>
+</div>
+
+<!-- Ramcharitmanas -->
+<div class="card" data-category="religious" data-subject="ramayan">
+  <img src="ramcharitmanas.jpg">
+  <div class="title">Ramcharitmanas</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Mahabharat (Hindi) -->
+<div class="card" data-category="religious" data-subject="mahabharat">
+  <img src="mahabharat.jpg">
+  <div class="title">Shri Mahabharat (Hindi)</div>
+  <div class="price">₹300</div>
+</div>
+
+<!-- Bhagavad Gita -->
+<div class="card" data-category="religious" data-subject="gita">
+  <img src="bhagavad_gita.jpg">
+  <div class="title">Shrimad Bhagavad Gita</div>
+  <div class="price">₹180</div>
+</div>
+
+<!-- Hanuman Chalisa -->
+<div class="card" data-category="religious" data-subject="aarti">
+  <img src="hanuman_chalisa.jpg">
+  <div class="title">Hanuman Chalisa</div>
+  <div class="price">₹60</div>
+</div>
+
+<!-- Durga Saptshati -->
+<div class="card" data-category="religious" data-subject="puja">
+  <img src="durga_saptshati.jpg">
+  <div class="title">Durga Saptshati</div>
+  <div class="price">₹160</div>
+</div>
+
+<!-- Shiv Puran -->
+<div class="card" data-category="religious" data-subject="puran">
+  <img src="shiv_puran.jpg">
+  <div class="title">Shiv Puran</div>
+  <div class="price">₹280</div>
+</div>
+
+<!-- Vishnu Puran -->
+<div class="card" data-category="religious" data-subject="puran">
+  <img src="vishnu_puran.jpg">
+  <div class="title">Vishnu Puran</div>
+  <div class="price">₹270</div>
+</div>
+  
+  <!-- Novel Book 1 -->
+<div class="card" data-category="general"
+     data-subject="novel"
+     data-keywords="novel story fiction">
+  <img src="novel-fiction.jpg" >
+  <div class="title">The Silent Story (Fiction Novel)</div>
+  <div class="price">₹299</div>
+</div>
+
+<!-- Novel Book 2 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="romantic novel love story">
+  <img src="romantic-novel.jpg" >
+  <div class="title">Love Beyond Words (Romantic Novel)</div>
+  <div class="price">₹279</div>
+</div>
+
+<!-- Novel Book 3 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="thriller suspense novel">
+  <img src="thriller-novel.jpg" >
+  <div class="title">The Last Secret (Thriller Novel)</div>
+  <div class="price">₹320</div>
+</div>
+
+<!-- Novel Book 4 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="hindi novel premchand">
+  <img src="godan.jpg" >
+  <div class="title">Godan – Munshi Premchand</div>
+  <div class="price">₹250</div>
+</div>
+
+<!-- Novel Book 5 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="english novel classic">
+  <img src="classic-novel.jpg" >
+  <div class="title">Pride and Prejudice (Classic Novel)</div>
+  <div class="price">₹340</div>
+</div>
+
+<!-- Novel Book 6 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="motivational novel">
+  <img src="motivational-novel.jpg" >
+  <div class="title">The Power of Belief (Novel)</div>
+  <div class="price">₹310</div>
+</div>
+  <!-- Novel Book 7 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="hindi novel social">
+  <img src="nirmala.jpg" >
+  <div class="title">Nirmala – Munshi Premchand</div>
+  <div class="price">₹230</div>
+</div>
+
+<!-- Novel Book 8 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="hindi novel poetry fiction">
+  <img src="rashmirathi.jpg" >
+  <div class="title">Rashmirathi – Ramdhari Singh Dinkar</div>
+  <div class="price">₹260</div>
+</div>
+
+<!-- Novel Book 9 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="english novel fantasy">
+  <img src="harry-potter.jpg" >
+  <div class="title">Harry Potter & The Philosopher’s Stone</div>
+  <div class="price">₹399</div>
+</div>
+
+<!-- Novel Book 10 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="romantic english novel">
+  <img src="fault-in-our-stars.jpg" >
+  <div class="title">The Fault in Our Stars</div>
+  <div class="price">₹350</div>
+</div>
+
+<!-- Novel Book 11 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="thriller mystery novel">
+  <img src="da-vinci-code.jpg" >
+  <div class="title">The Da Vinci Code</div>
+  <div class="price">₹380</div>
+</div>
+
+<!-- Novel Book 12 -->
+<div class="card"
+     data-category="general"
+     data-subject="novel"
+     data-keywords="self help novel">
+  <img src="alchemist.jpg" >
+  <div class="title">The Alchemist – Paulo Coelho</div>
+  <div class="price">₹299</div>
+</div>
+</div>
+  <script>
+(function syncTheme(){
+  const savedTheme = localStorage.getItem("theme");
+
+  if(savedTheme === "light"){
+    document.body.classList.remove("dark");
+  }else{
+    document.body.classList.add("dark");
+  }
+})();
+</script>
+  
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const STOCKS = [
+    { cls: "limited-stock", text: " Hurry !! ", weight: 50 },
+    { cls: "in-stock", text: "In Stock", weight: 45 },
+    { cls: "out-stock", text: "Sold out", weight: 5 }
+  ];
+
+  function getRandomDelay(){
+    const oneHour = 60 * 60 * 1000;
+    const twoHour = 2 * 60 * 60 * 1000;
+    return oneHour + Math.random() * (twoHour - oneHour);
+  }
+
+  function pickStock(){
+    const total = STOCKS.reduce((s,i)=>s+i.weight,0);
+    let r = Math.random() * total;
+    for(const s of STOCKS){
+      if(r < s.weight) return s;
+      r -= s.weight;
+    }
+  }
+  document.querySelectorAll(".card").forEach(card => {
+
+    const badge = document.createElement("span");
+    badge.className = "stock-badge";
+    card.appendChild(badge);
+
+    function setStock(){
+      const stock = pickStock();
+
+      badge.className = "stock-badge " + stock.cls;
+      badge.innerText = stock.text;
+
+      // UI effect
+      if(stock.cls === "out-stock"){
+        card.style.opacity = "0.6";
+        card.style.pointerEvents = "none";
+      }else{
+        card.style.opacity = "1";
+        card.style.pointerEvents = "auto";
+      }
+
+      setTimeout(setStock, getRandomDelay());
+    }
+    setStock(); // first run
+  });
+  document.querySelectorAll(".card").forEach(card => {
+
+    if(card.querySelector(".stars")) return;
+
+    const stars = document.createElement("div");
+    stars.className = "stars";
+
+    const rating = (Math.random() * (5 - 4.2) + 4.2).toFixed(1);
+    const percent = (rating / 5) * 100;
+
+    stars.style.setProperty("--fill", percent + "%");
+
+    card.insertBefore(stars, card.querySelector(".price"));
+  });
+document.querySelectorAll(".card").forEach(card => {
+
+    const price = card.querySelector(".price");
+    if(!price || price.dataset.done) return;
+    price.dataset.done = "1";
+    // wrap price
+    const wrap = document.createElement("div");
+    wrap.className = "price-wrap";
+
+    // move price inside wrapper
+    price.parentNode.insertBefore(wrap, price);
+    wrap.appendChild(price);
+
+    // 🔥 random discount 20% – 50%
+    const discount = Math.floor(Math.random() * (35 - 20 + 1)) + 20;
+
+    const cut = document.createElement("span");
+    cut.className = "price-cut";
+    cut.innerText = `-${discount}%`;
+
+    wrap.appendChild(cut);
+  });
+
+});
+
+document.querySelectorAll(".card img").forEach(img => {
+
+  if(img.parentElement.classList.contains("img-wrap")) return;
+
+  const wrap = document.createElement("div");
+  wrap.className = "img-wrap";
+
+  const skeleton = document.createElement("div");
+  skeleton.className = "img-skeleton";
+
+  img.parentNode.insertBefore(wrap, img);
+  wrap.appendChild(skeleton);
+  wrap.appendChild(img);
+
+  img.setAttribute("loading","lazy");
+
+  const startTime = Date.now();
+  const MIN_TIME = 800; // 👈 shimmer kam se kam 0.8 sec dikhe
+
+  const done = () => {
+    const elapsed = Date.now() - startTime;
+    const wait = Math.max(0, MIN_TIME - elapsed);
+
+    setTimeout(() => {
+      img.classList.add("loaded");
+      skeleton.remove();
+    }, wait);
+  };
+
+  if(img.complete){
+    done();
+  }else{
+    img.addEventListener("load", done);
+    img.addEventListener("error", ()=>skeleton.remove());
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+
+  applyUrlFilters(); // 🔥 URL filter FIRST
+
+  const input = document.getElementById("searchInput");
+  if(!input) return;
+
+  input.addEventListener("input", () => {
+
+    const q = input.value.toLowerCase().trim().split(/\s+/);
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+
+      let text =
+        (card.dataset.class || "") + " " +
+        (card.dataset.subject || "") + " " +
+        (card.dataset.course || "") + " " +
+        (card.dataset.exam || "") + " " +
+        (card.dataset.category || "");
+
+      text = text.toLowerCase();
+
+      let ok = true;
+      for(const w of q){
+        if(!text.includes(w)){
+          ok = false;
+          break;
+        }
+      }
+
+      card.style.display = ok ? "block" : "none";
+    });
+  });
+});
+</script>
+  <script>
+  
+function applyUrlFilters(){
+
+  const params = new URLSearchParams(location.search);
+
+  const fixedClass = params.get("class");
+  const from = params.get("from");
+  const to = params.get("to");
+  const course = params.get("course");
+  const exam = params.get("exam");
+  const category = params.get("category");
+  const subject = params.get("subject");
+
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+
+    let show = true;
+
+    const cls = card.dataset.class;
+    const crs = card.dataset.course;
+    const exm = card.dataset.exam;
+    const cat = card.dataset.category;
+    const sub = card.dataset.subject;
+
+    if (fixedClass && cls !== fixedClass) show = false;
+
+    if (from && to) {
+      const n = parseInt(cls);
+      if (isNaN(n) || n < from || n > to) show = false;
+    }
+
+    if (course && crs !== course) show = false;
+    if (exam && exm !== exam) show = false;
+    if (category && cat !== category) show = false;
+    if (subject && sub !== subject) show = false;
+
+    card.style.display = show ? "block" : "none";
+  });
+}
+</script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* =====================================================
+     🔹 1. URL PARAMETERS (BUTTON / SEARCH INPUT)
+  ===================================================== */
+  const params = new URLSearchParams(window.location.search);
+
+  const rawQuery       = (params.get("q") || "").toLowerCase().trim();
+  const fixedClass     = params.get("class");     // nursery / lkg / ukg / 1
+  const rangeFrom      = params.get("from");      // 1
+  const rangeTo        = params.get("to");        // 5
+  const fixedCategory  = params.get("category");  // school / exam / religious
+  const fixedSubject   = params.get("subject");   // english / math
+  const fixedExam      = params.get("exam");      // ssc / railway
+  const fixedCourse    = params.get("course");    // ba / bsc
+
+  const cards = document.querySelectorAll(".card");
+  let visibleCount = 0;
+
+  /* =====================================================
+     🔹 2. AUTO-CORRECT & NORMALIZATION MAPS
+  ===================================================== */
+
+  /* ---- Class words → number ---- */
+  const classWordMap = {
+    one:"1", first:"1",
+    two:"2", second:"2",
+    three:"3", third:"3",
+    four:"4", fourth:"4",
+    five:"5", fifth:"5",
+    six:"6", sixth:"6",
+    seven:"7", seventh:"7",
+    eight:"8", eighth:"8",
+    nine:"9", ninth:"9",
+    ten:"10", tenth:"10",
+    eleven:"11",
+    twelve:"12"
+  };
+
+  /* ---- Subjects (STRICT ONLY) ---- */
+  const SUBJECTS = [
+    "math","maths","english","hindi","science","sst","evs","gk",
+    "computer","grammar","drawing","sanskrit",
+    "physics","chemistry","biology","publicadmin",
+    "rhymes","geography","statistics","history",
+    "homescience","it","cs","environment",
+     "political","economics","sociology","education","accounting","insurance",
+  "kcsinha","financialaccounting","entrepreneurship",,"management","statistics","companylaw","auditing",
+  "incometax","costaccounting","businesseconomics","businesslaw","hindigrammar",
+  ];
+
+  /* ---- Exams / Competition ---- */
+  const EXAMS = [
+    "ssc","railway","banking","jee","neet","upsc","government"
+  ];
+
+  /* ---- College Courses ---- */
+  const COURSES = [
+    "ba","bsc","bcom","nursing",
+    "computer science","political science","public administration"
+  ];
+
+  /* ---- Religious / Puja ---- */
+  const RELIGIOUS = [
+    "puja","religious","holy","ramayan","geeta","aarti"
+  ];
+
+  /* =====================================================
+     🔹 3. QUERY PRE-PROCESSING
+  ===================================================== */
+
+  let words = [];
+
+  if (rawQuery) {
+    words = rawQuery
+      .split(/\s+/)
+      .map(w => classWordMap[w] || w)
+      .filter(Boolean);
+  }
+
+  /* =====================================================
+     🔹 4. FILTER ENGINE (HEART OF SYSTEM)
+  ===================================================== */
+
+  cards.forEach(card => {
+
+    const cls      = card.dataset.class || "";
+    const subject  = card.dataset.subject || "";
+    const category = card.dataset.category || "";
+    const exam     = card.dataset.exam || "";
+    const course   = card.dataset.course || "";
+
+    let match = true;
+
+    /* ---------------------------------
+       A. BUTTON BASED FIXED FILTERS
+    --------------------------------- */
+
+    if (fixedClass && cls !== fixedClass) {
+      match = false;
+    }
+
+    if (rangeFrom && rangeTo) {
+      if (!cls || isNaN(cls) || +cls < +rangeFrom || +cls > +rangeTo) {
+        match = false;
+      }
+    }
+
+    if (fixedCategory && category !== fixedCategory) {
+      match = false;
+    }
+
+    if (fixedSubject && subject !== fixedSubject) {
+      match = false;
+    }
+
+    if (fixedExam && exam !== fixedExam) {
+      match = false;
+    }
+
+    if (fixedCourse && course !== fixedCourse) {
+      match = false;
+    }
+
+    /* ---------------------------------
+       B. SEARCH WORD BASED FILTERS
+    --------------------------------- */
+    for (const w of words) {
+      
+// school books (Nursery – Class 12)
+if (w === "school") {
+  if (
+    !["nursery","lkg","ukg"].includes(cls) &&
+    !(+cls >= 1 && +cls <= 12)
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // college books (BA / BSc / BCom)
+if (w === "college") {
+  if (!["ba","bsc","bcom"].includes(course)) {
+    match = false;
+  }
+  continue;
+}
+      // 🧪 NEET books
+if (w === "neet") {
+  if (
+    category !== "medical" ||
+    subject !== "neet"
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // 🏥 Nursing books
+if (
+  w === "nursing" ||
+  w === "nurse" ||
+  w === "staff" ||
+  w === "gnm" ||
+  w === "anm"
+) {
+  if (
+    category !== "medical" ||
+    subject !== "nursing"
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // 📖 Novel books
+if (
+  w === "novel" ||
+  w === "novels" ||
+  w === "fiction" ||
+  w === "story" ||
+  w === "poetry"
+) {
+  if (
+    category !== "general" ||
+    subject !== "novel"
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // 🧮 JEE books
+if (w === "jee") {
+  if (
+    category !== "competitive" ||
+    subject !== "jee"
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // competition books
+if (w === "competition") {
+  if (!EXAMS.includes(exam)) match = false;
+  continue;
+}
+// 🔒 STRICT religious (exact subject)
+if (
+  w === "puja" ||
+  w === "ramayan" ||
+  w === "gita" ||
+  w === "geeta" ||
+  w === "aarti" ||
+  w === "puran" ||
+  w === "mahabharat"
+) {
+  if (
+    category !== "religious" ||
+    subject !== w
+  ) {
+    match = false;
+  }
+  continue;
+}
+      // 🔓 GENERAL religious (category level)
+if (w === "holy" || w === "religious") {
+  if (category !== "religious") {
+    match = false;
+  }
+  continue;
+}
+      /* Nursery / LKG / UKG */
+      if (["nursery","lkg","ukg"].includes(w)) {
+        if (cls !== w) match = false;
+        continue;
+      }
+
+      /* Class number */
+      if (/^\d{1,2}$/.test(w)) {
+        if (cls !== w) match = false;
+        continue;
+      }
+
+      /* Subject (STRICT) */
+      if (SUBJECTS.includes(w)) {
+        if (subject !== w) match = false;
+        continue;
+      }
+
+      /* Exam books */
+      if (EXAMS.includes(w)) {
+        if (exam !== w) match = false;
+        continue;
+      }
+
+      /* College courses */
+      if (COURSES.includes(w)) {
+        if (course !== w) match = false;
+        continue;
+      }
+
+      /* Religious */
+      if (RELIGIOUS.includes(w)) {
+        if (category !== "religious") match = false;
+        continue;
+      }
+    }
+    
+    /* ---------------------------------
+       C. FINAL DISPLAY
+    --------------------------------- */
+    card.style.display = match ? "block" : "none";
+    if (match) visibleCount++;
+
+  });
+
+  /* =====================================================
+     🔹 5. NO RESULT HANDLER
+  ===================================================== */
+
+  if (visibleCount === 0) {
+    const nr = document.getElementById("noResult");
+    if (nr) {
+      nr.style.display = "flex";
+    } else {
+      alert("No books found");
+    }
+  }
+
+});
+</script>
+</body>
+</html>
